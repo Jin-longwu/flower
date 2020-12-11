@@ -1,0 +1,63 @@
+{
+	"pages": [ 
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "TOMACADO花厨"
+			}
+		}
+	    ,{
+            "path" : "pages/shop/shop",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/classify/classify",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/note/note",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/member/member",
+		    "style" : {}
+		}
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",	
+		"navigationBarBackgroundColor": "#f9f9f9",
+		"backgroundColor": "#F8F8F8"
+	},"tabBar": {
+		"list": [{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/icon/home.png",
+				"selectedIconPath": "static/icon/home-active.png"
+			},
+			{
+				"pagePath": "pages/classify/classify",
+				"text": "分类",
+				"iconPath": "static/icon/fenlei.png",
+				"selectedIconPath": "static/icon/fenlei.png"
+			},
+			{
+				"pagePath": "pages/note/note",
+				"text": "笔记",
+				"iconPath": "static/icon/biji.png",
+				"selectedIconPath": "static/icon/biji.png"
+			},
+			{
+				"pagePath": "pages/shop/shop",
+				"text": "门店",
+				"iconPath": "static/icon/mendian.png",
+				"selectedIconPath": "static/icon/mendian.png"
+			},
+			{
+				"pagePath": "pages/member/member",
+				"text": "个人中心",
+				"iconPath": "static/icon/gerenzhongxin.png",
+				"selectedIconPath": "static/icon/gerenzhongxin.png"
+			}
+		]
+	}
+}
