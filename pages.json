@@ -9,7 +9,8 @@
 	    ,{
             "path" : "pages/shop/shop",
             "style" : {
-				"navigationBarTitleText": "门店"
+				"navigationBarTitleText": "门店",
+				 "enablePullDownRefresh": true
 			}
         },
 		{
