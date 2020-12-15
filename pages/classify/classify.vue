@@ -1,9 +1,24 @@
 <template>
-	<view>分类</view>
+	
 </template>
 
 <script>
-	
+	import {
+		myRequestGet
+	} from '@/utils/zgrequest.js'
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		onLoad() {
+			
+		},
+		methods:{
+			
+		}
+	}
 </script>
 
 <style lang="scss">
