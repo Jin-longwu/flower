@@ -14,23 +14,22 @@
 					</view>
 					<button @click="open" class="share">分享</button>
 					<view class="share1">
-						
-						
-					
-					<uni-popup ref="popup" type="share" class="share1">
-					    <view class="share11">
-					    	<uni-popup-share  @select="select" >推荐好物</uni-popup-share>
-					    </view>
-						<view >
-							<uni-popup-share  @select="select" >发送给朋友</uni-popup-share>
-						</view>
-						<view >
-							<uni-popup-share  @select="select" >生成海报</uni-popup-share>
-						</view>
-						<view >
-							<uni-popup-share  @select="select" >取消</uni-popup-share>
-						</view>
-					</uni-popup>
+						<uni-popup ref="popup" type="center">
+							<view style="background-color: rgb(248,248,248);width: 65vh; display: flex; flex-direction:column; text-align: center; height: 29vh; position: absolute; left: -375rpx; bottom: -50vh;">
+								<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
+									<uni-popup-share @select="select">推荐好物</uni-popup-share>
+								</view>
+								<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
+									<uni-popup-share @select="select">发送给朋友</uni-popup-share>
+								</view>
+								<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
+									<uni-popup-share @select="select">生成海报</uni-popup-share>
+								</view>
+								<view @click="closePopup" style="background-color: white; height: 7vh;margin-top: 1vh; line-height: 7vh; flex: 1;">
+									<uni-popup-share @select="select">取消</uni-popup-share>
+								</view>
+							</view>
+						</uni-popup>
 					</view>
 				</view>
 			</view>
@@ -40,7 +39,24 @@
 			</view>
 			<view class="server">
 				<uni-list :border="false">
-					<uni-list-item title="服务  收货后结算  线下门店  快递请求" showArrow></uni-list-item>
+						<uni-list-item title="服务  收货后结算  线下门店  快递请求" showArrow button clickable="true" @click="open">
+							<uni-popup ref="popupp" type="center">
+								<view style="background-color: rgb(248,248,248);width: 65vh; display: flex; flex-direction:column; text-align: center; height: 29vh; position: absolute; left: -375rpx; bottom: -50vh;">
+									<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
+										<uni-popup-share @select="select">推荐好物</uni-popup-share>
+									</view>
+									<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
+										<uni-popup-share @select="select">发送给朋友</uni-popup-share>
+									</view>
+									<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
+										<uni-popup-share @select="select">生成海报</uni-popup-share>
+									</view>
+									<view style="background-color: white; height: 7vh;margin-top: 1vh; line-height: 7vh; flex: 1;">
+										<uni-popup-share @select="select">取消</uni-popup-share>
+									</view>
+								</view>
+							</uni-popup>
+						</uni-list-item>
 				</uni-list>
 			</view>
 			<view class="flower">
@@ -122,9 +138,13 @@
 				this.getcontent()
 		},
 		methods: {
-			open(){
-			         this.$refs.popup.open()
-			      },
+			openPopup() {
+				this.$refs.popupp.open()
+				console.log(1111111111)
+			},
+			open() {
+				this.$refs.popup.open()
+			},
 			async getmessage() {
 				let result = await myRequestGet("/wscgoods/weapp/detail.json?alias=26xr56g4mjbq2")
 				this.message = result.data
@@ -155,6 +175,9 @@
 			buttonClick(e) {
 				console.log(e)
 				this.options[1].info++
+			},
+			closePopup() {
+				this.$refs.popup.close()
 			}
 		},
 		components: {
@@ -207,9 +230,7 @@
 					font-size: 26rpx;
 					text-align: center;
 					border-radius: 16rpx;
-					.share11{
-						text-align: center!important;
-					}
+
 				}
 			}
 
