@@ -1,0 +1,1 @@
+<view><block wx:for="{{carts}}" wx:for-item="item" wx:for-index="__i0__" wx:key="alias"><view class="carts"><text>{{item.title}}</text><text>{{item.buynum}}</text><text>{{item.price}}</text></view></block></view>
