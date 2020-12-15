@@ -106,7 +106,8 @@
 						alias: this.alias,
 						sellprice: this.info[0].price,
 						buynum: 1,
-						title: this.title
+						title: this.title,
+						url: this.lunboinfo[0].url
 					}
 					this.addToCarts(good)
 				} else {

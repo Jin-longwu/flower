@@ -11,7 +11,6 @@
 	import {
 		myRequestGet
 	} from "@/utils/request.js";
-	import "@/static/fonts/iconfont.css";
 	import goodlist from '@/components/goodslist/goodslist.vue';
 	export default {
 		data() {
@@ -51,11 +50,6 @@
 				if (result.code === 0) {
 					this.goods = [...this.goods, ...result.data.list];
 				}
-			},
-			goSuperMarket(item) {
-				uni.navigateTo({
-					url: item.url
-				})
 			}
 		},
 		components: {
@@ -66,28 +60,4 @@
 </script>
 
 <style lang="scss">
-	.home {
-		swiper {
-			height: 380rpx;
-
-			image {
-				width: 750rpx;
-				height: 380rpx;
-			}
-		}
-
-		.uni-grid-item {
-			text-align: center;
-
-			.iconfont {
-				background: pink;
-				line-height: 90rpx;
-				width: 100rpx;
-				height: 100rpx;
-				border-radius: 90px;
-				margin: 10rpx auto;
-				font-size: 25px;
-			}
-		}
-	}
 </style>

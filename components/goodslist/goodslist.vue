@@ -1,6 +1,6 @@
 <template>
 	<view class="hot_goods">
-		<view class="tit">商品</view>
+		<view class="tit">更多推荐</view>
 		<view class="goods_list">
 			<view class="goods_item" v-for="item in goods" :key="item.alias" @click="itemClick(item)">
 				<image :src="item.image_url"></image>

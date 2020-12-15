@@ -24,10 +24,11 @@
         "pagePath": "pages/carts/carts",
         "text": "购物车",
         "iconPath": "static/icon/cart.png",
-        "selectedIconPath": "static/icon/cart-active.png"
+        "selectedIconPath": "static/icon/cart-active.png",
+        "backgroundColor": "grey"
       }
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap42.json"
+  "sitemapLocation": "sitemap36.json"
 }

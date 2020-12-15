@@ -18,7 +18,20 @@ const store = new Vuex.Store({
 				state.carts.push(good)
 			}
 			uni.setStorageSync('carts', state.carts)
-		}
+		},
+		changeCarts(state, newgood) {
+			var currentGood = state.carts.find(item => {
+				if (item.alias == newgood.alias) {
+					return item;
+				}
+			})
+			if (currentGood) {
+				currentGood.buynum = newgood.buynum
+			} else {
+				state.carts.push(newgood)
+			}
+			uni.setStorageSync('carts', state.carts)
+		},
 	},
 	actions: {}
 })
