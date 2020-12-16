@@ -18,6 +18,23 @@
 				flag: false,
 				goods: [],
 				alias: "",
+				tags: [
+					"63qeicqw",
+					"p8s449xh",
+					"8rtak5n5",
+					"n56z1hy61",
+					"481x6cbp",
+					"3bxno8e61",
+					"04yblbhe1",
+					"qnp9b1k3",
+					"jdmsmq861",
+					"rwablbw3",
+					"c7lu9fz3",
+					"jg2dsyjl",
+					"2tnrf49a",
+					"0hrft5ym"
+				],
+				randomnum: ""
 			}
 		},
 		onLoad() {
@@ -25,9 +42,13 @@
 		},
 		methods: {
 			async getProducts() {
-				let result = await myRequestGet("/wscshop/goods/goodsByTagAlias.json?alias=n56z1hy61&kdt_id=10056586")
+				var randomnum = parseInt(Math.random() * 14)
+				console.log(randomnum, "nnnnnnnnnnnnnnnnnnnnnn")
+				let result = await myRequestGet(
+					"/wscshop/goods/goodsByTagAlias.json?kdt_id=10056586&alias=" + this.tags[randomnum])
+				console.log(result, "rrrrrrrrrrrrrr")
 				if (result.code === 0) {
-					this.goods = [...this.goods, ...result.list];
+					this.goods = [...this.goods, ...result.data.list];
 				}
 			},
 		},

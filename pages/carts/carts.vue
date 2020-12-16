@@ -1,27 +1,34 @@
 <template>
 	<view>
 		<view class="shop" v-for="(item,index) in carts" :key="index">
-			<checkbox class="check" ref="checkbox" functionType="page" :checked="pageChecked" @pageClick="changeBoxFromPage(index)"></checkbox>
-			<view class="carts">
-				<text class="title">{{item.title}}</text>
-				<text class="price">￥{{item.sellprice}}</text>
-				<!-- <image class="pic" src="../../static/1.JPG"></image> -->
-				<image :src="item.url" class="pic"></image>
-				<view class="change">
-					<text class="less" @click="reduce(index)">-</text>
-					<text class="num">{{item.buynum}}</text>
-					<text class="more" @click="plus(index)">+</text>
-				</view>
-			</view>
+			<uni-swipe-action>
+				<uni-swipe-action-item>
+					<checkbox class="check" ref="checkbox" functionType="page" :checked="pageChecked" @pageClick="changeBoxFromPage(index)"></checkbox>
+					<view class="carts">
+						<text class="title">{{item.title}}</text>
+						<text class="price">￥{{item.sellprice}}</text>
+						<image :src="item.img" class="pic"></image>
+						<view class="change">
+							<text class="less" @click="reduce(index)">-</text>
+							<text class="num">{{item.buynum}}</text>
+							<text class="more" @click="plus(index)">+</text>
+						</view>
+					</view>
+					<template v-slot:right>
+						<view class="slot-button"><text class="slot-button-text" @click="swipeClick(index)">删除</text></view>
+					</template>
+				</uni-swipe-action-item>
+			</uni-swipe-action>
+
 		</view>
 		<view>
 			<goodlist :goods="goods"></goodlist>
 			<uni-load-more v-if="!flag" :status="'loading'"></uni-load-more>
 			<uni-load-more v-else :status="'noMore'"></uni-load-more>
 		</view>
-		<view class="account">
+		<view v-if="flag" class="account">
 			<view class="left">
-				<checkbox class="checkall" ref="checkboxall" functionType="page" :checked="pageChecked" @pageClick="changeBoxFromPage(index)"></checkbox>
+				<checkbox class="checkall" ref="checkboxall" functionType="page" :checked="pageChecked" @pageClick="changeBoxall"></checkbox>
 				<text class="all">全选</text>
 			</view>
 			<text class="and">合计：￥{{account}}</text>
@@ -31,9 +38,11 @@
 </template>
 
 <script>
-	import goodlist from '@/components/goodslist/goodslist.vue';
-	import checkbox from "../../components/checkbox/checkbox.vue"
-	import uniLoadMore from "@/components/uni-ui/uni-load-more/uni-load-more.vue";
+	import uniSwipeAction from "@/components/uni-ui/uni-swipe-action/uni-swipe-action.vue"
+	import uniSwipeActionItem from "@/components/uni-ui/uni-swipe-action-item/uni-swipe-action-item.vue"
+	import goodlist from "@/components/goodslist/goodslist.vue"
+	import checkbox from "@/components/checkbox/checkbox.vue"
+	import uniLoadMore from "@/components/uni-ui/uni-load-more/uni-load-more.vue"
 	import {
 		mapState,
 		mapMutations,
@@ -55,24 +64,90 @@
 				n: "",
 				p: "",
 				pageindex: 1,
-				num: ""
+				num: "",
+				img: "",
+				newcarts: [],
+				tags: [
+					"63qeicqw",
+					"p8s449xh",
+					"8rtak5n5",
+					"n56z1hy61",
+					"481x6cbp",
+					"3bxno8e61",
+					"04yblbhe1",
+					"qnp9b1k3",
+					"jdmsmq861",
+					"rwablbw3",
+					"c7lu9fz3",
+					"jg2dsyjl",
+					"2tnrf49a",
+					"0hrft5ym"
+				],
+				randomnum: ""
 			}
 		},
 		methods: {
 			...mapMutations({
 				addToCarts: "addToCarts",
-				changeCarts: "changeCarts"
+				changeCarts: "changeCarts",
+				insteadcarts: "insteadcarts"
 			}),
+			swipeClick(index) {
+				uni.showModal({
+					title: '提示',
+					content: '是否删除',
+					success: res => {
+						if (res.confirm) {
+							this.carts.splice(index, 1);
+							this.insteadcarts({
+								Step: index
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
 			changeBoxFromPage(index) {
 				if (this.$refs.checkbox[index].checked) {
 					this.$refs.checkbox[index].checked = this.pageChecked
+					for (var i = 0; i < this.carts.length; i++) {
+						if (this.$refs.checkbox[i].checked) {
+							this.flag = true
+							this.$refs.checkboxall.checked = false
+							break
+						} else {
+							this.flag = false
+						}
+					}
+
 				} else {
 					this.$refs.checkbox[index].checked = !this.pageChecked
-					var n = this.carts[index].buynum
-					var p = this.carts[index].sellprice
-					this.account += n * p
+					this.flag = true
+					for (var i = 0; i < this.carts.length; i++) {
+						if (!this.$refs.checkbox[i].checked) {
+							this.$refs.checkboxall.checked = false
+							break
+						} else {
+							this.$refs.checkboxall.checked = true
+						}
+					}
 				}
-
+			},
+			changeBoxall() {
+				if (!this.$refs.checkboxall.checked) {
+					this.$refs.checkboxall.checked = !this.pageChecked
+					for (var i = 0; i < this.carts.length; i++) {
+						this.$refs.checkbox[i].checked = true
+					}
+					console.log(this.account, "cccccccccccccc")
+				} else {
+					this.$refs.checkboxall.checked = this.pageChecked
+					for (var i = 0; i < this.carts.length; i++) {
+						this.$refs.checkbox[i].checked = false
+					}
+					this.flag = false
+				}
 			},
 			reduce(index) {
 				if (this.carts[index].buynum === 0) {
@@ -87,15 +162,13 @@
 						sellprice: this.carts[index].sellprice,
 						buynum: this.num,
 						title: this.carts[index].title,
-						url: this.carts[index].url
+						img: this.carts[index].img
 					}
 					this.carts[index] = { ...good
 					}
 					var newgood = { ...this.carts[index]
 					}
 					this.changeCarts(newgood)
-					var p = this.carts[index].sellprice
-					this.account -= p
 				}
 				console.log(newgood, "99999999999999999999999999999")
 
@@ -107,19 +180,27 @@
 					sellprice: this.carts[index].sellprice,
 					buynum: this.num,
 					title: this.carts[index].title,
-					url: this.carts[index].url
+					img: this.carts[index].img
 				}
 				this.carts[index] = { ...good
 				}
 				var newgood = { ...this.carts[index]
 				}
 				this.changeCarts(newgood)
-				var p = this.carts[index].sellprice
-				this.account += p
 				console.log(newgood, "99999999999999999999999999999")
 			},
+			// async getProducts() {
+			// 	let result = await myRequestGet("/wscshop/goods/goodsByTagAlias.json?alias=n56z1hy61&kdt_id=10056586")
+			// 	if (result.code === 0) {
+			// 		this.goods = [...this.goods, ...result.data.list];
+			// 	}
+			// }
 			async getProducts() {
-				let result = await myRequestGet("/wscshop/goods/goodsByTagAlias.json?alias=n56z1hy61&kdt_id=10056586")
+				var randomnum = parseInt(Math.random() * 14)
+				console.log(randomnum, "nnnnnnnnnnnnnnnnnnnnnn")
+				let result = await myRequestGet(
+					"/wscshop/goods/goodsByTagAlias.json?kdt_id=10056586&alias=" + this.tags[randomnum])
+				console.log(result, "rrrrrrrrrrrrrr")
 				if (result.code === 0) {
 					this.goods = [...this.goods, ...result.data.list];
 				}
@@ -145,12 +226,34 @@
 		components: {
 			checkbox,
 			goodlist,
-			uniLoadMore
+			uniLoadMore,
+			uniSwipeAction,
+			uniSwipeActionItem
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.slot-button {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		height: 100%;
+		/* #endif */
+		flex: 1;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		padding: 0 20px;
+		background-color: #ff5a5f;
+	}
+
+	.slot-button-text {
+		color: #ffffff;
+		font-size: 14px;
+	}
+
+
+
 	.account {
 		width: 750rpx;
 		height: 140rpx;
@@ -160,7 +263,7 @@
 		display: flex;
 
 		.left {
-			width: 170rpx;
+			width: 180rpx;
 			height: 140rpx;
 			position: absolute;
 			left: 0;
@@ -188,16 +291,10 @@
 			font-size: 40rpx;
 			position: absolute;
 			bottom: 44rpx;
-			right: 320rpx;
+			right: 200rpx;
 			flex: 1;
 		}
 
-		.cost {
-			font-size: 40rpx;
-			position: absolute;
-			bottom: 40rpx;
-			right: 220rpx;
-		}
 
 		.jiesuan {
 			width: 180rpx;
@@ -215,7 +312,7 @@
 
 	.shop {
 		width: 750rpx;
-		height: 200rpx;
+		height: 240rpx;
 		position: relative;
 
 		.check {
@@ -231,7 +328,7 @@
 			width: 680rpx;
 			height: 200rpx;
 			position: relative;
-			margin: 20rpx 70rpx 0;
+			margin: 40rpx 70rpx 0;
 			border-bottom: 1px solid grey;
 
 			.change {
@@ -251,7 +348,7 @@
 				.less {
 					width: 42rpx;
 					heihgt: 42rpx;
-					background-color: grey;
+					background-color: rgb(229, 229, 231);
 					position: absolute;
 					bottom: 0;
 					left: 0;
@@ -262,7 +359,7 @@
 				.more {
 					width: 42rpx;
 					heihgt: 42rpx;
-					background-color: grey;
+					background-color: rgb(229, 229, 231);
 					position: absolute;
 					bottom: 0;
 					right: 0;

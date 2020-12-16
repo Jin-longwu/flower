@@ -1,13 +1,13 @@
 <template>
 	<view class="goods">
 		<swiper indicator-dots>
-			<swiper-item v-for="item in lunboinfo" :key="alias">
+			<swiper-item v-for="(item,index) in lunboinfo" :key="item.alias">
 				<image :src="item.url"></image>
 			</swiper-item>
 		</swiper>
 		<view class="good_info">
 			<view class="price">
-				<text>￥{{info[0].price}}-{{info[1].price}}</text>
+				<text>￥{{info[0].price/100}}</text>
 				<text>￥{{origin}}</text>
 			</view>
 			<view class="goods_title">{{title}}</view>
@@ -57,6 +57,7 @@
 				title: "",
 				content: {},
 				lunboinfo: [],
+				price: "",
 				buttonGroup: [{
 						text: '加入购物车',
 						backgroundColor: '#ff0000',
@@ -104,23 +105,27 @@
 					//加入购物车
 					var good = {
 						alias: this.alias,
-						sellprice: this.info[0].price,
+						sellprice: this.info[0].price / 100,
 						buynum: 1,
 						title: this.title,
-						url: this.lunboinfo[0].url
+						img: this.lunboinfo[0].url
 					}
 					this.addToCarts(good)
+					console.log(good, "gggggggggggg")
 				} else {
-					//立即购买
+					uni.showToast({
+						title: "暂未开发此功能！",
+						duration: 2000
+					})
 				}
-				console.log(good, "6666666666666666666666666666666")
+				console.log(good.img, "6666666666666666666666666666666")
 			}
 		},
 		onLoad(options) {
 			this.alias = options.alias;
 			this.getDetail();
 			this.getContent();
-			this.getLunbo();
+			this.getLunbo()
 		},
 		components: {
 			uniGoodsNav

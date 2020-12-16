@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "购物车",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "checkbox": "/components/checkbox/checkbox",
-    "goodlist": "/components/goodslist/goodslist",
-    "uni-load-more": "/components/uni-ui/uni-load-more/uni-load-more"
-  }
-}

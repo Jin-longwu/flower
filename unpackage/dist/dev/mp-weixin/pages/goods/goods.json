@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "uni-load-more": "/components/uni-ui/uni-load-more/uni-load-more",
-    "goodlist": "/components/goodslist/goodslist"
-  }
-}

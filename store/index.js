@@ -32,6 +32,10 @@ const store = new Vuex.Store({
 			}
 			uni.setStorageSync('carts', state.carts)
 		},
+		insteadcarts(state, payload) {
+			uni.setStorageSync('carts', state.carts)
+			console.log("保存成功")
+		}
 	},
 	actions: {}
 })
