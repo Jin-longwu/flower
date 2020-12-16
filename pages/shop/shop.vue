@@ -7,15 +7,13 @@
 						<image :src="item"></image>
 					</swiper-item>
 				</swiper>
-				<image :src="tubiao" class="tubiao"></image>
 				<view class="word1">
 					<text class="name">北京府中环店</text>
-					<text class="address">
-						<image src="../../static/icon/ditu.png"></image>王府井大街999号王府中环东座
+					<text class="address iconfont">
+						&#xe601;中国街999号中环东座
 					</text>
-					<text class="time">
-						<image src="../../static/icon/shijian.png"></image>
-						周一至周日 11:00-22:00
+					<text class="time iconfont">
+						&#xe63b;周一至周日 11:00-22:00
 					</text>
 				</view>
 			</view>
@@ -25,15 +23,13 @@
 						<image :src="item"></image>
 					</swiper-item>
 				</swiper>
-				<image :src="tubiao" class="tubiao1"></image>
 				<view class="word1">
-					<text class="name">朝阳大悦店</text>
-					<text class="address">
-						<image src="../../static/icon/ditu.png"></image>朝阳北路666号朝阳大悦城
+					<text class="name">太阳店</text>
+					<text class="address iconfont">
+						&#xe601;朝阳北路666号太阳城
 					</text>
-					<text class="time">
-						<image src="../../static/icon/shijian.png"></image>
-						周一至周日 11:00-22:00
+					<text class="time iconfont">
+						&#xe63b;周一至周日 11:00-22:00
 					</text>
 				</view>
 			</view>
@@ -43,15 +39,13 @@
 						<image :src="item"></image>
 					</swiper-item>
 				</swiper>
-				<image :src="tubiao" class="tubiao2"></image>
 				<view class="word1">
 					<text class="name">中国环贸店</text>
-					<text class="address">
-						<image src="../../static/icon/ditu.png"></image>建国门外大街888号国贸商城中区
+					<text class="address iconfont">
+						&#xe601;建国门外大街888号国贸商城中区
 					</text>
-					<text class="time">
-						<image src="../../static/icon/shijian.png"></image>
-						周一至周日 11:00-22:00
+					<text class="time iconfont">
+						&#xe63b;周一至周日 11:00-22:00
 					</text>
 				</view>
 			</view>
@@ -61,15 +55,13 @@
 						<image :src="item"></image>
 					</swiper-item>
 				</swiper>
-				<image :src="tubiao" class="tubiao3"></image>
 				<view class="word1">
 					<text class="name">卓悦店</text>
-					<text class="address">
-						<image src="../../static/icon/ditu.png"></image>深南大道333号One Avenue
+					<text class="address iconfont">
+						&#xe601;深南大道333号One Avenue
 					</text>
-					<text class="time">
-						<image src="../../static/icon/shijian.png"></image>
-						周一至周日 11:00-22:00
+					<text class="time iconfont">
+						&#xe63b;周一至周日 11:00-22:00
 					</text>
 				</view>
 			</view>
@@ -78,6 +70,7 @@
 </template>
 
 <script>
+	import './static/iconfont/iconfont.css'
 	import {
 		myRequestGet
 	} from '@/utils/zgrequest.js'
@@ -85,7 +78,6 @@
 		data() {
 			return {
 				shops1: [],
-				tubiao: "",
 				shops2: [],
 				shops3: [],
 				shops4: [],
@@ -100,35 +92,34 @@
 		methods: {
 			async getShops1() {
 				const result = await myRequestGet(
-					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill",{
-					pageindex: this.pageindex
-				});
+					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill", {
+						pageindex: this.pageindex
+					});
 				this.shops1 = result.data.components[2].store.images;
-				this.tubiao = result.data.components[2].logo_url;
 			},
 			async getShops2() {
 				const result = await myRequestGet(
-					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill");
+					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill"
+				);
 				this.shops2 = result.data.components[4].store.images;
-				this.tubiao = result.data.components[4].logo_url;
 			},
 			async getShops3() {
 				const result = await myRequestGet(
-					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill");
+					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill"
+				);
 				this.shops3 = result.data.components[6].store.images;
-				this.tubiao = result.data.components[6].logo_url;
 			},
 			async getShops4() {
 				const result = await myRequestGet(
-					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill");
+					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill"
+				);
 				this.shops4 = result.data.components[8].store.images;
-				this.tubiao = result.data.components[8].logo_url;
 			},
 		},
 		onPullDownRefresh() {
 			this.pageindex = 1;
 			this.flag = false;
-			this.shops = [];
+			this.shops1 = [];
 			this.getShops().then(() => {
 				uni.stopPullDownRefresh()
 			});
@@ -152,26 +143,33 @@
 				padding: 10px;
 				box-sizing: border-box;
 
+				/*#ifdef MP-WEIXIN/H5*/
 				swiper {
 					height: 320rpx;
 
 					swiper-item {
 						image {
 							height: 320rpx;
-							
+
 						}
 					}
 				}
 
-				.tubiao {
-					width: 140rpx;
-					height: 140rpx;
-					border-radius: 50%;
-					margin-left: 40rpx;
-					margin-top: -40rpx;
-					
-					
+				/*#endif*/
+				/*#ifdef MP-ALIPAY*/
+				swiper {
+					height: 320rpx;
+					width: 100%;
+
+					swiper-item {
+						image {
+							height: 320rpx;
+							width: 100%;
+						}
+					}
 				}
+
+				/*#endif*/
 
 				.word1 {
 					width: 270px;
@@ -199,21 +197,6 @@
 						font-size: 32rpx;
 						display: block;
 					}
-				}
-				.tubiao1 {
-					width: 140rpx;
-					height: 140rpx;
-					border-radius: 50%;
-				}
-				.tubiao2 {
-					width: 140rpx;
-					height: 140rpx;
-					border-radius: 50%;
-				}
-				.tubiao3 {
-					width: 140rpx;
-					height: 140rpx;
-					border-radius: 50%;
 				}
 			}
 		}
