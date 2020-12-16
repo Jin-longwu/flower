@@ -1,0 +1,49 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path": "pages/product/list",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "有花相伴"
+			}
+		}
+	],
+	"globalStyle": {
+			"navigationBarTextStyle": "black",
+			"navigationBarTitleText": "uni-app",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"backgroundColor": "#f8f8f8"
+		},
+		"tabBar": {
+			"color": "#C0C4CC",
+			"selectedColor": "#fa436a",
+			"borderStyle": "black",
+			"backgroundColor": "#ffffff",
+			"list": [{
+					"pagePath": "pages/index/index",
+					"iconPath": "static/tab-home.png",
+					"selectedIconPath": "static/tab-home-current.png",
+					"text": "首页"
+				},
+				{
+					"pagePath": "pages/user/user",
+					"iconPath": "static/tab-my.png",
+					"selectedIconPath": "static/tab-my-current.png",
+					"text": "个人中心"
+				}
+			]
+		}
+	}
+	
