@@ -63,7 +63,7 @@
 				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				cateList: [],
-				goodsList: []	
+				goodsList: []
 			};
 		},
 

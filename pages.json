@@ -41,7 +41,8 @@
 					"pagePath": "pages/user/user",
 					"iconPath": "static/tab-my.png",
 					"selectedIconPath": "static/tab-my-current.png",
-					"text": "个人中心"
+					"text": "个人中心",
+					"militext":"我的"
 				}
 			]
 		}
