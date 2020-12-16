@@ -3,7 +3,12 @@ const baseUrl = "https://h5.youzan.com"
 export function myRequestGet(url, data) {
 	return new Promise((resolve, reject) => {
 		uni.request({
+			// #ifdef H5
+			url:url,
+			//#endif
+			// #ifndef H5
 			url: baseUrl + url,
+			//#endif
 			method: "GET",
 			data: data,
 			success: function(res) {

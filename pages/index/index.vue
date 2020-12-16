@@ -39,23 +39,7 @@
 			</view>
 			<view class="server">
 				<uni-list :border="false">
-						<uni-list-item title="服务  收货后结算  线下门店  快递请求" showArrow button clickable="true" @click="open">
-							<uni-popup ref="popupp" type="center">
-								<view style="background-color: rgb(248,248,248);width: 65vh; display: flex; flex-direction:column; text-align: center; height: 29vh; position: absolute; left: -375rpx; bottom: -50vh;">
-									<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
-										<uni-popup-share @select="select">推荐好物</uni-popup-share>
-									</view>
-									<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
-										<uni-popup-share @select="select">发送给朋友</uni-popup-share>
-									</view>
-									<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
-										<uni-popup-share @select="select">生成海报</uni-popup-share>
-									</view>
-									<view style="background-color: white; height: 7vh;margin-top: 1vh; line-height: 7vh; flex: 1;">
-										<uni-popup-share @select="select">取消</uni-popup-share>
-									</view>
-								</view>
-							</uni-popup>
+						<uni-list-item title="服务  收货后结算  线下门店  快递请求" showArrow button clickable="true" @click="openPopup">
 						</uni-list-item>
 				</uni-list>
 			</view>
@@ -83,7 +67,7 @@
 
 		</scroll-view>
 		<view class="goods_nav">
-			<uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" @click="onClick" @buttonClick="buttonClick" />
+			<uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" @buttonClick="buttonClick" />
 		</view>
 	</view>
 </template>
@@ -138,10 +122,6 @@
 				this.getcontent()
 		},
 		methods: {
-			openPopup() {
-				this.$refs.popupp.open()
-				console.log(1111111111)
-			},
 			open() {
 				this.$refs.popup.open()
 			},
@@ -166,17 +146,25 @@
 					urls
 				})
 			},
-			onClick(e) {
-				uni.showToast({
-					title: `点击${e.content.text}`,
-					icon: 'none'
-				})
-			},
 			buttonClick(e) {
-				console.log(e)
-				this.options[1].info++
+				if(e.index == 0){
+					this.options[1].info++
+					uni.showToast({
+						title: `${e.content.text}成功`,
+						icon: 'success',
+						position:'center'
+					})
+				}else if(e.index == 1){
+					uni.showToast({
+						title: '此功能尚未开通',
+						icon: 'loading',
+					})
+				}
+				
+					
+				
 			},
-			closePopup() {
+			close() {
 				this.$refs.popup.close()
 			}
 		},
@@ -279,7 +267,7 @@
 				button {
 					height: 50rpx;
 					font-size: 15px;
-					border-radius: 20px;
+					border-radius: 40rpx;
 					color: #B6E3D7;
 					border: 1px solid #B6E3D7;
 					line-height: 50rpx;
