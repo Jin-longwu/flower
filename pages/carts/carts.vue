@@ -1,13 +1,20 @@
 <template>
 	<view>
+		<view class="empty" v-show="show">
+			<image src="../../static/icon/cart.png" class="empty_bg"></image>
+			<text class="none">购物车还是空的</text>
+			<text class="go">赶紧买点宝贝慰劳下自己吧</text>
+			<input type="button" value="去逛逛" @click="gofirst" />
+		</view>
+
 		<view class="shop" v-for="(item,index) in carts" :key="index">
 			<uni-swipe-action>
 				<uni-swipe-action-item>
 					<checkbox class="check" ref="checkbox" functionType="page" :checked="pageChecked" @pageClick="changeBoxFromPage(index)"></checkbox>
 					<view class="carts">
-						<text class="title">{{item.title}}</text>
-						<text class="price">￥{{item.sellprice}}</text>
-						<image :src="item.img" class="pic"></image>
+						<text class=" title" @click="itemClick(index)">{{item.title}}</text>
+						<text class="price" @click="itemClick(index)">￥{{item.sellprice}}</text>
+						<image :src="item.img" class="pic" @click="itemClick(index)"></image>
 						<view class="change">
 							<text class="less" @click="reduce(index)">-</text>
 							<text class="num">{{item.buynum}}</text>
@@ -55,9 +62,11 @@
 		data() {
 			return {
 				pageChecked: false,
+				show: "",
 				good: {},
 				goods: [],
 				newgood: {},
+				newlist: {},
 				flag: false,
 				alias: "",
 				account: 0,
@@ -92,16 +101,31 @@
 				changeCarts: "changeCarts",
 				insteadcarts: "insteadcarts"
 			}),
+			gofirst() {
+				uni.switchTab({
+					url: "/pages/index/index"
+				})
+			},
+			itemClick(index) {
+				uni.navigateTo({
+					url: "/pages/goodsdetail/goodsdetail?alias=" + this.carts[index].alias
+				})
+			},
 			swipeClick(index) {
 				uni.showModal({
 					title: '提示',
 					content: '是否删除',
 					success: res => {
 						if (res.confirm) {
+							this.carts[index].checked=this.pageChecked
+							this.account -= this.carts[index].sellprice * this.carts[index].buynum
 							this.carts.splice(index, 1);
 							this.insteadcarts({
-								Step: index
+								step: index
 							})
+							if (this.carts.length == 0) {
+								this.show = true
+							}
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -120,18 +144,40 @@
 							this.flag = false
 						}
 					}
+					this.account -= this.carts[index].sellprice * this.carts[index].buynum
 
 				} else {
 					this.$refs.checkbox[index].checked = !this.pageChecked
 					this.flag = true
-					for (var i = 0; i < this.carts.length; i++) {
-						if (!this.$refs.checkbox[i].checked) {
-							this.$refs.checkboxall.checked = false
-							break
-						} else {
-							this.$refs.checkboxall.checked = true
+					this.account = 0 + this.carts[index].sellprice * this.carts[index].buynum
+					if (this.carts.length == 1) { //只有一条数据  且被勾选上时触发
+						console.log("只有一条数据！！！！")
+						this.$refs.checkboxall.checked = !this.pageChecked
+						this.account = 0 + this.carts[0].sellprice * this.carts[0].buynum
+					} else {
+						for (var i = 0; i < this.carts.length; i++) {
+
+							//判断测试加购商品只有一个被选中时
+							// 	for (var j = 0; j < this.carts.length; j++) {
+							// 		if () {
+							// 			this.$refs.checkboxall.checked = !this.pageChecked
+							// 			this.account = 0 + this.carts[j].sellprice * this.carts[j].buynum
+							// 		}
+							// 	}
+
+							if (!this.$refs.checkbox[i].checked) {
+								this.$refs.checkboxall.checked = false
+								break
+							} else {
+								this.$refs.checkboxall.checked = true
+							}
 						}
+
+
+						//单选框被选中时
+						this.account += this.carts[index].sellprice * this.carts[index].buynum
 					}
+
 				}
 			},
 			changeBoxall() {
@@ -139,10 +185,11 @@
 					this.$refs.checkboxall.checked = !this.pageChecked
 					for (var i = 0; i < this.carts.length; i++) {
 						this.$refs.checkbox[i].checked = true
+						this.account += this.carts[i].sellprice * this.carts[i].buynum + 0
 					}
-					console.log(this.account, "cccccccccccccc")
 				} else {
 					this.$refs.checkboxall.checked = this.pageChecked
+					this.account = 0
 					for (var i = 0; i < this.carts.length; i++) {
 						this.$refs.checkbox[i].checked = false
 					}
@@ -157,6 +204,7 @@
 					})
 				} else {
 					this.num = this.carts[index].buynum - 1
+					this.account -= this.carts[index].sellprice
 					var good = {
 						alias: this.carts[index].alias,
 						sellprice: this.carts[index].sellprice,
@@ -175,6 +223,7 @@
 			},
 			plus(index) {
 				this.num = this.carts[index].buynum + 1
+				this.account += this.carts[index].sellprice
 				var good = {
 					alias: this.carts[index].alias,
 					sellprice: this.carts[index].sellprice,
@@ -189,12 +238,6 @@
 				this.changeCarts(newgood)
 				console.log(newgood, "99999999999999999999999999999")
 			},
-			// async getProducts() {
-			// 	let result = await myRequestGet("/wscshop/goods/goodsByTagAlias.json?alias=n56z1hy61&kdt_id=10056586")
-			// 	if (result.code === 0) {
-			// 		this.goods = [...this.goods, ...result.data.list];
-			// 	}
-			// }
 			async getProducts() {
 				var randomnum = parseInt(Math.random() * 14)
 				console.log(randomnum, "nnnnnnnnnnnnnnnnnnnnnn")
@@ -205,14 +248,26 @@
 					this.goods = [...this.goods, ...result.data.list];
 				}
 			},
+			async judge() {
+				if (this.carts.length == 0) {
+					this.show = true
+				} else {
+					this.show = false
+				}
+			}
 		},
 		computed: {
 			...mapState({
-				carts: "carts"
+				carts: "carts",
+				checkedList: "checkedList"
 			})
 		},
+		onShow() {
+			this.judge()
+		},
 		onLoad() {
-			this.getProducts();
+			this.getProducts()
+			this.judge()
 		},
 		onReachBottom() {
 			this.pageindex++;
@@ -223,6 +278,7 @@
 				this.flag = true;
 			}
 		},
+
 		components: {
 			checkbox,
 			goodlist,
@@ -234,6 +290,54 @@
 </script>
 
 <style lang="scss" scoped>
+	.empty {
+		width: 100%;
+		height: 620rpx;
+		position: relative;
+
+		.empty_bg {
+			width: 120px;
+			height: 120px;
+			position: absolute;
+			left: 50%;
+			margin-left: -60px;
+			top: 100px;
+		}
+
+		.none {
+			color: grey;
+			font-size: 17px;
+			position: absolute;
+			top: 240px;
+			width: 120px;
+			left: 50%;
+			margin-left: -60px;
+		}
+
+		.go {
+			color: grey;
+			width: 192px;
+			left: 50%;
+			position: absolute;
+			margin-left: -96px;
+			top: 270px;
+		}
+
+		input {
+			border-radius: 10px;
+			border: 1px solid #76A28C;
+			color: #76A28C;
+			text-align: center;
+			height: 40px;
+			line-height: 40px;
+			position: absolute;
+			width: 100px !important;
+			top: 310px !important;
+			left: 50% !important;
+			margin-left: -50px !important;
+		}
+	}
+
 	.slot-button {
 		/* #ifndef APP-NVUE */
 		display: flex;

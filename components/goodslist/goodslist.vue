@@ -1,6 +1,6 @@
 <template>
 	<view class="hot_goods">
-		<view class="tit">更多推荐</view>
+		<view class="tit">精选商品</view>
 		<view class="goods_list">
 			<view class="goods_item" v-for="item in goods" :key="item.alias" @click="itemClick(item)">
 				<image :src="item.image_url"></image>
@@ -17,8 +17,7 @@
 	export default {
 		props: ["goods"],
 		data() {
-			return {
-			};
+			return {};
 		},
 		methods: {
 			itemClick(item) {
@@ -37,7 +36,7 @@
 		.tit {
 			border-top: 2px solid #eee;
 			border-bottom: 2px solid #eee;
-			margin-top: 20px;
+			margin-top: 70px;
 			margin-bottom: 3px;
 			color: blue;
 			height: 50px;

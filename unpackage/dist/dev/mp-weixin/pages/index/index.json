@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "uni-app",
+  "usingComponents": {
+    "goodlist": "/components/goodslist/goodslist",
+    "uni-load-more": "/components/uni-ui/uni-load-more/uni-load-more"
+  }
+}

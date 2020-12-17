@@ -16,11 +16,18 @@
 			"path": "pages/carts/carts",
 			"style": {
 				"navigationBarTitleText": "购物车",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 
 		}, {
 			"path": "pages/goodsdetail/goodsdetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/nologin/nologin",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
@@ -44,8 +51,7 @@
 			"pagePath": "pages/carts/carts",
 			"text": "购物车",
 			"iconPath": "static/icon/cart.png",
-			"selectedIconPath": "static/icon/cart-active.png",
-			"backgroundColor": "grey"
+			"selectedIconPath": "static/icon/cart-active.png"
 		}]
 	}
 }

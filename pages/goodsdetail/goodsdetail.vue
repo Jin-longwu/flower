@@ -1,5 +1,8 @@
 <template>
 	<view class="goods">
+		<!-- <view class="tips" vi-show="tipsshow">
+			<text>该功能尚未开通！</text>
+		</view> -->
 		<swiper indicator-dots>
 			<swiper-item v-for="(item,index) in lunboinfo" :key="item.alias">
 				<image :src="item.url"></image>
@@ -7,7 +10,7 @@
 		</swiper>
 		<view class="good_info">
 			<view class="price">
-				<text>￥{{info[0].price/100}}</text>
+				<text>￥{{price}}</text>
 				<text>￥{{origin}}</text>
 			</view>
 			<view class="goods_title">{{title}}</view>
@@ -51,13 +54,14 @@
 			return {
 				alias: "",
 				id: "",
-				info: [],
+				price: "",
 				origin: "",
 				htmlNodes: [],
 				title: "",
 				content: {},
 				lunboinfo: [],
 				price: "",
+				tipsshow: false,
 				buttonGroup: [{
 						text: '加入购物车',
 						backgroundColor: '#ff0000',
@@ -77,13 +81,15 @@
 			}),
 			async getDetail() {
 				const res = await myRequestGet('/wscgoods/weapp/detail.json?alias=' + this.alias)
-				this.info = res.data.goodsData.skuInfo.skuPrices
+				this.price = res.data.goodsData.skuInfo.skuPrices[0] ? res.data.goodsData.skuInfo.skuPrices[0].price / 100 : res.data
+					.goodsData.skuInfo.spuPrice.price / 100
 				this.origin = res.data.goodsData.goods.origin
 				this.title = res.data.goodsData.goods.title
 			},
 			async getContent() {
 				const res = await myRequestGet('/wscshop/goods/showcase-components.json?kdt_id=10056586&alias=' + this.alias)
-				this.content = formatRichText(res.data.components[0].content)
+				this.content = formatRichText(res.data.components[0].content ? res.data.components[0].content : res.data.components[
+					1].content)
 				//#ifdef MP-ALIPAY
 				//支付宝小程序rich-text不支持字符串，需要是nodes数组
 				this.htmlNodes = parse(this.content)
@@ -94,10 +100,17 @@
 				this.lunboinfo = res.data.goodsData.goods.pictures
 			},
 			onClick(e) {
-				uni.showToast({
-					title: `点击${e.content.text}`,
-					icon: 'none',
-				});
+				if (e.index == 0) {
+					//跳转到店铺
+					uni.switchTab({
+						url: ""
+					})
+				} else {
+					//跳转到购物车
+					uni.switchTab({
+						url: "/pages/carts/carts"
+					})
+				}
 
 			},
 			buttonClick(e) {
@@ -105,7 +118,7 @@
 					//加入购物车
 					var good = {
 						alias: this.alias,
-						sellprice: this.info[0].price / 100,
+						sellprice: this.price,
 						buynum: 1,
 						title: this.title,
 						img: this.lunboinfo[0].url
@@ -113,10 +126,10 @@
 					this.addToCarts(good)
 					console.log(good, "gggggggggggg")
 				} else {
-					uni.showToast({
-						title: "暂未开发此功能！",
-						duration: 2000
-					})
+					this.tipsshow = true
+					// setTimeout(function() {
+					// 	this.tipsshow = false
+					// }, 2000)
 				}
 				console.log(good.img, "6666666666666666666666666666666")
 			}
@@ -134,6 +147,21 @@
 </script>
 
 <style lang="scss">
+	.tips {
+		width: 80px;
+		height: 100px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-top: -50px;
+		margin-left: -40px;
+
+		text {
+			text-align: center;
+			line-height: 100px;
+		}
+	}
+
 	.goods {
 		swiper {
 			height: 750rpx;
@@ -153,6 +181,10 @@
 			font-size: 35rpx;
 			color: pink;
 			line-height: 80rpx;
+
+			text:first-child {
+				color: red !important;
+			}
 
 			text:nth-child(2) {
 				color: #ccc;
