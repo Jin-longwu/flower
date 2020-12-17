@@ -14,7 +14,7 @@
 					</view>
 					<button @click="open" class="share">分享</button>
 					<view class="share1">
-						<uni-popup ref="popup" type="center">
+						<uni-popup ref="popup" type="center" class="share11">
 							<view style="background-color: rgb(248,248,248);width: 65vh; display: flex; flex-direction:column; text-align: center; height: 29vh; position: absolute; left: -375rpx; bottom: -50vh;">
 								<view style="background-color: white; border-bottom: 1px solid rgb(246,246,246); height: 7vh; line-height: 7vh; flex: 1;">
 									<uni-popup-share @select="select">推荐好物</uni-popup-share>
@@ -122,9 +122,9 @@
 				this.getcontent()
 		},
 		methods: {
-			open() {
+			open(options) {
 				this.$refs.popup.open()
-			},
+					},
 			async getmessage() {
 				let result = await myRequestGet("/wscgoods/weapp/detail.json?alias=26xr56g4mjbq2")
 				this.message = result.data

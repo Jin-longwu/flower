@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App'
 import '@/static/fonts/iconfont.css'
-import store from './store'
 
 Vue.config.productionTip = false
 
@@ -14,7 +13,6 @@ Vue.filter("formatDate", function(data) {
 })
 
 const app = new Vue({
-	store,
     ...App
 })
 app.$mount()
