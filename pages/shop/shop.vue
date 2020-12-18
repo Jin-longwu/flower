@@ -9,7 +9,7 @@
 				</swiper>
 				<view class="word1">
 					<text class="name">北京府中环店</text>
-					<text class="address iconfont">
+					<text class="address iconfont" @click="gotoMap">
 						&#xe601;中国街999号中环东座
 					</text>
 					<text class="time iconfont">
@@ -25,7 +25,7 @@
 				</swiper>
 				<view class="word1">
 					<text class="name">太阳店</text>
-					<text class="address iconfont">
+					<text class="address iconfont" @click="gotoMap">
 						&#xe601;朝阳北路666号太阳城
 					</text>
 					<text class="time iconfont">
@@ -41,7 +41,7 @@
 				</swiper>
 				<view class="word1">
 					<text class="name">中国环贸店</text>
-					<text class="address iconfont">
+					<text class="address iconfont" @click="gotoMap">
 						&#xe601;建国门外大街888号国贸商城中区
 					</text>
 					<text class="time iconfont">
@@ -57,7 +57,7 @@
 				</swiper>
 				<view class="word1">
 					<text class="name">卓悦店</text>
-					<text class="address iconfont">
+					<text class="address iconfont" @click="gotoMap">
 						&#xe601;深南大道333号One Avenue
 					</text>
 					<text class="time iconfont">
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-	import './static/iconfont/iconfont.css'
+	import '../../static/iconfont/iconfont.css'
 	import {
 		myRequestGet
 	} from '@/utils/zgrequest.js'
@@ -115,6 +115,11 @@
 				);
 				this.shops4 = result.data.components[8].store.images;
 			},
+			gotoMap() {
+				uni.navigateTo({
+					url:"/pages/map/map"
+				})
+			}
 		},
 		onPullDownRefresh() {
 			this.pageindex = 1;
@@ -172,7 +177,7 @@
 				/*#endif*/
 
 				.word1 {
-					width: 270px;
+					width: 640rpx;
 					margin-left: 10px;
 
 					.name {

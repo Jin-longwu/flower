@@ -18,6 +18,10 @@
 		    "style" : {}
 		},
 		{
+		    "path" : "pages/map/map",
+		    "style" : {}
+		},
+		{
 		    "path" : "pages/note/note",
 		    "style" : {}
 		},
@@ -30,7 +34,8 @@
 		"navigationBarTextStyle": "black",	
 		"navigationBarBackgroundColor": "#f9f9f9",
 		"backgroundColor": "#F8F8F8"
-	},"tabBar": {
+	},
+	"tabBar": {
 		"list": [{
 				"pagePath": "pages/index/index",
 				"text": "首页",
