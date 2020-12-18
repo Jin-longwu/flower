@@ -4,7 +4,7 @@
 			<view class="shop_item">
 				<swiper indicator-dots :autoplay="true" :interval="2000" circular>
 					<swiper-item v-for="item in shops1" :key='item'>
-						<image :src="item"></image>
+						<image :src="item" mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
 				<view class="word1">
@@ -20,7 +20,7 @@
 			<view class="shop_item">
 				<swiper indicator-dots :autoplay="true" :interval="2000" circular>
 					<swiper-item v-for="item in shops2" :key='item'>
-						<image :src="item"></image>
+						<image :src="item" mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
 				<view class="word1">
@@ -36,7 +36,7 @@
 			<view class="shop_item">
 				<swiper indicator-dots :autoplay="true" :interval="2000" circular>
 					<swiper-item v-for="item in shops3" :key='item'>
-						<image :src="item"></image>
+						<image :src="item" mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
 				<view class="word1">
@@ -52,7 +52,7 @@
 			<view class="shop_item">
 				<swiper indicator-dots :autoplay="true" :interval="2000" circular>
 					<swiper-item v-for="item in shops4" :key='item'>
-						<image :src="item"></image>
+						<image :src="item" mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
 				<view class="word1">
@@ -92,9 +92,7 @@
 		methods: {
 			async getShops1() {
 				const result = await myRequestGet(
-					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill", {
-						pageindex: this.pageindex
-					});
+					"/wscshop/weapp/feature_detail.json?app_id=wx988cb9521c950d63&kdt_id=10056586&access_token=4d97706cd5aa6e7e58253810c1a19e&alias=h2knlXzmCr&show_ad=true&check_multistore=true&check_chainstore=true&async_components=goods%2Cump_limitdiscount&adaptor_components=text%2Ctitle%2Cstore%2Csearch%2Cfeature_video_search%2Ccoupon%2Ccube_v3%2Cnotice%2Cgroupon%2Cpoints_goods%2Cgoods%2Cgoods_recommend%2Ctag_list_top%2Ctag_list_left%2Cump_seckill");
 				this.shops1 = result.data.components[2].store.images;
 			},
 			async getShops2() {
@@ -125,7 +123,19 @@
 			this.pageindex = 1;
 			this.flag = false;
 			this.shops1 = [];
-			this.getShops().then(() => {
+			this.shops2 = [];
+			this.shops3 = [];
+			this.shops4 = [];
+			this.getShops1().then(() => {
+				uni.stopPullDownRefresh()
+			});
+			this.getShops2().then(() => {
+				uni.stopPullDownRefresh()
+			});
+			this.getShops3().then(() => {
+				uni.stopPullDownRefresh()
+			});
+			this.getShops4().then(() => {
 				uni.stopPullDownRefresh()
 			});
 		},
@@ -155,7 +165,7 @@
 					swiper-item {
 						image {
 							height: 320rpx;
-
+							width: 750rpx;
 						}
 					}
 				}
