@@ -27,7 +27,7 @@
 			}
 
 		}, {
-			"path": "pages/nologin/nologin",
+			"path": "pages/pay/pay",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false

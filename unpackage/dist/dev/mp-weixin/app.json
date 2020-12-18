@@ -4,7 +4,7 @@
     "pages/goods/goods",
     "pages/carts/carts",
     "pages/goodsdetail/goodsdetail",
-    "pages/nologin/nologin"
+    "pages/pay/pay"
   ],
   "subPackages": [],
   "window": {
@@ -30,5 +30,5 @@
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap66.json"
+  "sitemapLocation": "sitemap75.json"
 }

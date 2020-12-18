@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "link-address": "/components/xuan-linkAddress/xuan-linkAddress",
+    "passkeyborad": "/components/yzc-paykeyboard/yzc-paykeyboard"
+  }
+}

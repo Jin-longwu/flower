@@ -15,6 +15,9 @@
 			</view>
 			<view class="goods_title">{{title}}</view>
 			<view class="goods_nav">
+				<view class="num">
+					{{num}}
+				</view>
 				<uni-goods-nav :fill="true" :button-group="buttonGroup" @click="onClick" @buttonClick="buttonClick"></uni-goods-nav>
 			</view>
 		</view>
@@ -56,12 +59,12 @@
 				id: "",
 				price: "",
 				origin: "",
+				num: "",
 				htmlNodes: [],
 				title: "",
 				content: {},
 				lunboinfo: [],
 				price: "",
-				tipsshow: false,
 				buttonGroup: [{
 						text: '加入购物车',
 						backgroundColor: '#ff0000',
@@ -124,21 +127,58 @@
 						img: this.lunboinfo[0].url
 					}
 					this.addToCarts(good)
-					console.log(good, "gggggggggggg")
+					if (this.num == 0) {
+						this.num = 1
+					}
+					for (var i = 0; i < this.carts.length; i++) {
+						if (this.carts[i].alias == good.alias) {
+							console.log("添加的商品已经存在了")
+							break
+						} else {
+							if (this.num < 6) {
+								this.num = this.carts.length
+							} else {
+								this.num = "5+"
+								console.log("加太多了显示不完")
+							}
+
+						}
+					}
+					uni.showToast({
+						title: "添加成功！",
+						duration: 2000
+					})
 				} else {
-					this.tipsshow = true
-					// setTimeout(function() {
-					// 	this.tipsshow = false
-					// }, 2000)
+					uni.navigateTo({
+						url: "/pages/pay/pay"
+					})
 				}
-				console.log(good.img, "6666666666666666666666666666666")
 			}
 		},
 		onLoad(options) {
 			this.alias = options.alias;
 			this.getDetail();
 			this.getContent();
-			this.getLunbo()
+			this.getLunbo();
+			if (this.num < 6) {
+				this.num = this.carts.length.toString()
+			} else {
+				this.num = "5+"
+			}
+		},
+		onShow() {
+			if (this.num < 6) {
+				this.num = this.carts.length.toString()
+			} else {
+				this.num = "5+"
+			}
+
+			console.log(this.num, "这是购物车长度")
+		},
+		computed: {
+			...mapState({
+				carts: "carts",
+			})
 		},
 		components: {
 			uniGoodsNav
@@ -146,22 +186,7 @@
 	}
 </script>
 
-<style lang="scss">
-	.tips {
-		width: 80px;
-		height: 100px;
-		position: fixed;
-		left: 50%;
-		top: 50%;
-		margin-top: -50px;
-		margin-left: -40px;
-
-		text {
-			text-align: center;
-			line-height: 100px;
-		}
-	}
-
+<style lang="scss" scoped>
 	.goods {
 		swiper {
 			height: 750rpx;
@@ -203,6 +228,20 @@
 			position: fixed;
 			bottom: 0;
 			width: 100%;
+
+			.num {
+				font-weight: bold;
+				font-size: 15px;
+				z-index: 9999999;
+				width: 17px !important;
+				height: 17px !important;
+				color: red !important;
+				position: absolute !important;
+				top: 2px !important;
+				left: 83px !important;
+				text-align: center !important;
+				line-height: 15px !important;
+			}
 		}
 	}
 

@@ -24,63 +24,63 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.tips {
-  width: 80px;
-  height: 100px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-top: -50px;
-  margin-left: -40px;
-}
-.tips text {
-  text-align: center;
-  line-height: 100px;
-}
-.goods swiper {
+.goods swiper.data-v-7bd00a56 {
   height: 750rpx;
 }
-.goods swiper image {
+.goods swiper image.data-v-7bd00a56 {
   width: 100%;
   height: 100%;
 }
-.good_info {
+.good_info.data-v-7bd00a56 {
   padding: 10px;
   position: relative;
 }
-.good_info .price {
+.good_info .price.data-v-7bd00a56 {
   font-size: 35rpx;
   color: pink;
   line-height: 80rpx;
 }
-.good_info .price text:first-child {
+.good_info .price text.data-v-7bd00a56:first-child {
   color: red !important;
 }
-.good_info .price text:nth-child(2) {
+.good_info .price text.data-v-7bd00a56:nth-child(2) {
   color: #ccc;
   font-size: 28rpx;
   text-decoration: line-through;
   margin-left: 20rpx;
 }
-.good_info .goods_title {
+.good_info .goods_title.data-v-7bd00a56 {
   font-size: 32rpx;
   line-height: 60rpx;
 }
-.good_info .goods_nav {
+.good_info .goods_nav.data-v-7bd00a56 {
   position: fixed;
   bottom: 0;
   width: 100%;
 }
-.good_detail {
+.good_info .goods_nav .num.data-v-7bd00a56 {
+  font-weight: bold;
+  font-size: 15px;
+  z-index: 9999999;
+  width: 17px !important;
+  height: 17px !important;
+  color: red !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 83px !important;
+  text-align: center !important;
+  line-height: 15px !important;
+}
+.good_detail.data-v-7bd00a56 {
   padding-bottom: 50px;
 }
-.good_detail .tit {
+.good_detail .tit.data-v-7bd00a56 {
   font-size: 32rpx;
   padding-left: 10px;
   border-bottom: 1px solid #eee;
   line-height: 70rpx;
 }
-.good_detail .content {
+.good_detail .content.data-v-7bd00a56 {
   padding: 10px;
   font-size: 28rpx;
   color: #333;

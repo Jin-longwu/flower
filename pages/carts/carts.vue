@@ -33,13 +33,13 @@
 			<uni-load-more v-if="!flag" :status="'loading'"></uni-load-more>
 			<uni-load-more v-else :status="'noMore'"></uni-load-more>
 		</view>
-		<view v-if="flag" class="account">
+		<view v-if="accountflag" class="account">
 			<view class="left">
 				<checkbox class="checkall" ref="checkboxall" functionType="page" :checked="pageChecked" @pageClick="changeBoxall"></checkbox>
 				<text class="all">全选</text>
 			</view>
 			<text class="and">合计：￥{{account}}</text>
-			<input type="button" value="结算" class="jiesuan" />
+			<button class="jiesuan" @click="gopay">结算</button>
 		</view>
 	</view>
 </template>
@@ -66,8 +66,8 @@
 				good: {},
 				goods: [],
 				newgood: {},
-				newlist: {},
 				flag: false,
+				accountflag: false,
 				alias: "",
 				account: 0,
 				n: "",
@@ -117,15 +117,15 @@
 					content: '是否删除',
 					success: res => {
 						if (res.confirm) {
-							this.carts[index].checked=this.pageChecked
-							this.account -= this.carts[index].sellprice * this.carts[index].buynum
-							this.carts.splice(index, 1);
+							this.carts.splice(index, 1)
 							this.insteadcarts({
 								step: index
 							})
-							if (this.carts.length == 0) {
+							if (this.carts.length.toString() == 0) {
 								this.show = true
+								this.accountflag = false
 							}
+							this.getAccount()
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -137,74 +137,75 @@
 					this.$refs.checkbox[index].checked = this.pageChecked
 					for (var i = 0; i < this.carts.length; i++) {
 						if (this.$refs.checkbox[i].checked) {
-							this.flag = true
-							this.$refs.checkboxall.checked = false
+							this.accountflag = true
 							break
 						} else {
-							this.flag = false
+							this.accountflag = false
 						}
 					}
-					this.account -= this.carts[index].sellprice * this.carts[index].buynum
-
+					this.getAccount()
 				} else {
 					this.$refs.checkbox[index].checked = !this.pageChecked
-					this.flag = true
-					this.account = 0 + this.carts[index].sellprice * this.carts[index].buynum
-					if (this.carts.length == 1) { //只有一条数据  且被勾选上时触发
-						console.log("只有一条数据！！！！")
-						this.$refs.checkboxall.checked = !this.pageChecked
-						this.account = 0 + this.carts[0].sellprice * this.carts[0].buynum
+					this.accountflag = true
+					if (this.carts.length == 1) {
+						this.accountflag = true
+						this.$refs.checkboxall.checked = true
+						console.log("全选应该打钩,,,,单选触发")
+						this.getAccount()
 					} else {
+
 						for (var i = 0; i < this.carts.length; i++) {
-
-							//判断测试加购商品只有一个被选中时
-							// 	for (var j = 0; j < this.carts.length; j++) {
-							// 		if () {
-							// 			this.$refs.checkboxall.checked = !this.pageChecked
-							// 			this.account = 0 + this.carts[j].sellprice * this.carts[j].buynum
-							// 		}
-							// 	}
-
 							if (!this.$refs.checkbox[i].checked) {
-								this.$refs.checkboxall.checked = false
+								this.$refs.checkboxall.checked = this.pageChecked
 								break
 							} else {
-								this.$refs.checkboxall.checked = true
+								this.$refs.checkboxall.checked = !this.pageChecked
 							}
 						}
 
-
-						//单选框被选中时
-						this.account += this.carts[index].sellprice * this.carts[index].buynum
 					}
 
+
+
+					// for (var q = 0; q < this.carts.length; q++) {
+					// 	if ((q < index && !this.$refs.checkbox[q].checked) && (q == index==0||q == index && this.$refs.checkbox[q].checked) && (q >
+					// 			index && !this.$refs.checkbox[q].checked)) {
+					// 		this.account = this.carts[q].sellprice * this.carts[q].buynum
+					// 		console.log("aaaaaaaaaaaaaaaaaaa")
+					// }
 				}
+
+
+
+				this.getAccount()
 			},
+
+
 			changeBoxall() {
 				if (!this.$refs.checkboxall.checked) {
 					this.$refs.checkboxall.checked = !this.pageChecked
 					for (var i = 0; i < this.carts.length; i++) {
-						this.$refs.checkbox[i].checked = true
-						this.account += this.carts[i].sellprice * this.carts[i].buynum + 0
+						this.$refs.checkbox[i].checked = !this.pageChecked
 					}
+					this.getAccount()
 				} else {
 					this.$refs.checkboxall.checked = this.pageChecked
-					this.account = 0
 					for (var i = 0; i < this.carts.length; i++) {
 						this.$refs.checkbox[i].checked = false
 					}
-					this.flag = false
+					this.account = 0
+					this.accountflag = false
 				}
 			},
 			reduce(index) {
-				if (this.carts[index].buynum === 0) {
+				if (this.carts[index].buynum === 1) {
 					uni.showToast({
-						title: "数量已为空！",
-						duration: 2000
+						title: "该宝贝不能减少了呦~",
+						duration: 2000,
+						icon: "none"
 					})
 				} else {
 					this.num = this.carts[index].buynum - 1
-					this.account -= this.carts[index].sellprice
 					var good = {
 						alias: this.carts[index].alias,
 						sellprice: this.carts[index].sellprice,
@@ -217,13 +218,12 @@
 					var newgood = { ...this.carts[index]
 					}
 					this.changeCarts(newgood)
+					this.getAccount()
 				}
-				console.log(newgood, "99999999999999999999999999999")
 
 			},
 			plus(index) {
 				this.num = this.carts[index].buynum + 1
-				this.account += this.carts[index].sellprice
 				var good = {
 					alias: this.carts[index].alias,
 					sellprice: this.carts[index].sellprice,
@@ -236,14 +236,17 @@
 				var newgood = { ...this.carts[index]
 				}
 				this.changeCarts(newgood)
-				console.log(newgood, "99999999999999999999999999999")
+				this.getAccount()
+			},
+			gopay() {
+				uni.navigateTo({
+					url: "/pages/pay/pay"
+				})
 			},
 			async getProducts() {
 				var randomnum = parseInt(Math.random() * 14)
-				console.log(randomnum, "nnnnnnnnnnnnnnnnnnnnnn")
 				let result = await myRequestGet(
 					"/wscshop/goods/goodsByTagAlias.json?kdt_id=10056586&alias=" + this.tags[randomnum])
-				console.log(result, "rrrrrrrrrrrrrr")
 				if (result.code === 0) {
 					this.goods = [...this.goods, ...result.data.list];
 				}
@@ -254,16 +257,41 @@
 				} else {
 					this.show = false
 				}
+			},
+			async getAccount() {
+				let total = 0
+				if (this.carts.length == 1) {
+					if (this.$refs.checkbox[0].checked) {
+						this.$refs.checkboxall.checked = !this.pageChecked
+						console.log("全选应该打钩，，，，函数触发的")
+						total = this.carts[0].sellprice * this.carts[0].buynum
+					} else {
+						this.$refs.checkboxall.checked = this.pageChecked
+						total = 0
+					}
+				} else if (this.carts.length > 1) {
+					for (var z = 0; z < this.carts.length; z++) {
+						if (this.$refs.checkbox[z].checked) {
+							total += this.carts[z].sellprice * this.carts[z].buynum
+						}
+					}
+				} else if (this.carts.length == 0) {
+					total = 0
+				}
+
+				this.account = total
 			}
 		},
 		computed: {
 			...mapState({
 				carts: "carts",
-				checkedList: "checkedList"
 			})
 		},
 		onShow() {
 			this.judge()
+			this.account = 0
+			this.getProducts()
+
 		},
 		onLoad() {
 			this.getProducts()
@@ -275,7 +303,7 @@
 				this.getProducts();
 			} else {
 				//没有更多数据了
-				this.flag = true;
+				this.flag = true
 			}
 		},
 
@@ -363,8 +391,9 @@
 		height: 140rpx;
 		position: fixed;
 		bottom: 0;
-		background-color: yellow;
+		background-color: rgb(255, 250, 232);
 		display: flex;
+		z-index: 9999999;
 
 		.left {
 			width: 180rpx;
@@ -408,8 +437,8 @@
 			bottom: 0;
 			line-height: 140rpx;
 			font-size: 40rpx;
-			color: red;
-			background-color: black;
+			color: white;
+			background-color: orangered;
 			text-align: center;
 		}
 	}

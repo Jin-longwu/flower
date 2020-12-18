@@ -98,10 +98,11 @@
   height: 140rpx;
   position: fixed;
   bottom: 0;
-  background-color: yellow;
+  background-color: #fffae8;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
+  z-index: 9999999;
 }
 .account .left.data-v-14ff6a2e {
   width: 180rpx;
@@ -142,8 +143,8 @@
   bottom: 0;
   line-height: 140rpx;
   font-size: 40rpx;
-  color: red;
-  background-color: black;
+  color: white;
+  background-color: orangered;
   text-align: center;
 }
 .shop.data-v-14ff6a2e {

@@ -1935,7 +1935,176 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 102:
+/***/ 104:
+/*!*******************************************************************!*\
+  !*** E:/微信小程序/购物车测试/static/xuan-linkAddress/get_linkAddress_p.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api = _interopRequireDefault(__webpack_require__(/*! @/components/xuan-linkAddress/api.js */ 105));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+  /*
+  *_this:全局this
+  * data:数据(参数)
+  * callback:回掉
+  */
+  get_linkAddress: function get_linkAddress(_this, tag, data, callback) {
+    //请求
+    _api.default.get_linkAddress_api(data).then(function (res) {
+      var revert = res.data.data;
+      console.log(revert);
+      if (res.data.code == 1) {
+        if (tag === "province") {
+          console.log("province");
+          _this.linkAddress_area[0].info = revert;
+          callback(true); //回掉
+        }
+        if (tag === "city") {
+          console.log("city");
+          _this.linkAddress_area[1].info = revert;
+          callback(true); //回掉
+        }
+        if (tag === "district") {
+          console.log("district");
+          _this.linkAddress_area[2].info = revert;
+          callback(true); //回掉
+        }
+      }
+    });
+  } };exports.default = _default;
+
+/***/ }),
+
+/***/ 105:
+/*!*********************************************************!*\
+  !*** E:/微信小程序/购物车测试/components/xuan-linkAddress/api.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _request = _interopRequireDefault(__webpack_require__(/*! @/static/xuan-linkAddress/request.js */ 106));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+//创建Request对象
+var request = new _request.default();var _default =
+
+{
+  //data 参数值
+  get_linkAddress_api: function get_linkAddress_api(data) {
+    console.log(data);
+    return request.http('/api/address/area', data, 'GET');
+  } };exports.default = _default;
+
+/***/ }),
+
+/***/ 106:
+/*!*********************************************************!*\
+  !*** E:/微信小程序/购物车测试/static/xuan-linkAddress/request.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);return Constructor;} //网络请求
+var Request = /*#__PURE__*/function () {function Request() {_classCallCheck(this, Request);}_createClass(Request, [{ key: "http",
+    /*
+                                                                                                                                  *paramete 参数
+                                                                                                                                  * data 参数值
+                                                                                                                                  * method 请求方式
+                                                                                                                                  */value: function http(
+    paramete, data, method) {
+      //根地址
+      var BASE_API = "http://admin.farmereasy.com";
+      return new Promise(function (resolve, reject) {
+        uni.request({
+          url: "".concat(BASE_API).concat(paramete),
+          data: data,
+          method: method,
+          success: function success(res) {
+            resolve(res);
+          },
+          fail: function fail(res) {
+            resolve(0);
+          } });
+
+      });
+    } }]);return Request;}();exports.default = Request;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 11:
+/*!*************************************!*\
+  !*** E:/微信小程序/购物车测试/store/index.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
+var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+_vue.default.use(_vuex.default);
+var store = new _vuex.default.Store({
+  state: {
+    carts: uni.getStorageSync('carts') || [],
+    user_address: {
+      province: '',
+      city: '',
+      district: '' } },
+
+
+  mutations: {
+    //将商品加购
+    addToCarts: function addToCarts(state, good) {
+      var currentGood = state.carts.find(function (item) {
+        if (item.alias == good.alias) {
+          return item;
+        }
+      });
+      if (currentGood) {
+        currentGood.buynum += good.buynum;
+      } else {
+        state.carts.push(good);
+      }
+      uni.setStorageSync('carts', state.carts);
+    },
+
+    //加购商品数量改变时保存数量
+    changeCarts: function changeCarts(state, newgood) {
+      var currentGood = state.carts.find(function (item) {
+        if (item.alias == newgood.alias) {
+          return item;
+        }
+      });
+      if (currentGood) {
+        currentGood.buynum = newgood.buynum;
+      } else {
+        state.carts.push(newgood);
+      }
+      uni.setStorageSync('carts', state.carts);
+    },
+
+    //加购商品被删时保存剩下的
+    insteadcarts: function insteadcarts(state, payload) {
+      uni.setStorageSync('carts', state.carts);
+      console.log("保存成功");
+    },
+
+
+    commit_address: function commit_address(state, data) {
+      state.user_address = data;
+    } },
+
+  actions: {} });var _default =
+
+store;exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 114:
 /*!***********************************************************!*\
   !*** E:/微信小程序/购物车测试/components/uni-ui/uni-icons/icons.js ***!
   \***********************************************************/
@@ -2074,457 +2243,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   "cloud-download-filled": "\uE8E9",
   "headphones": "\uE8BF",
   "shop": "\uE609" };exports.default = _default;
-
-/***/ }),
-
-/***/ 105:
-/*!**************************************!*\
-  !*** E:/微信小程序/购物车测试/utils/format.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.formatRichText = formatRichText;function formatRichText(html) {
-  var html = new String(html);
-  var newContent = html.replace(/<img[^>]*>/gi, function (match, capture) {
-    match = match.replace(/style="[^"]+"/gi, '').replace(/style='[^']+'/gi, '');
-    match = match.replace(/width="[^"]+"/gi, '').replace(/width='[^']+'/gi, '');
-    match = match.replace(/height="[^"]+"/gi, '').replace(/height='[^']+'/gi, '');
-    return match;
-  });
-  newContent = newContent.replace(/style="[^"]+"/gi, function (match, capture) {
-    match = match.replace(/width:[^;]+;/gi, 'max-width:100%;').replace(/width:[^;]+;/gi, 'max-width:100%;');
-    return match;
-  });
-  newContent = newContent.replace(/<br[^>]*\/>/gi, '');
-  newContent = newContent.replace(/\<img/gi,
-  '<img style="max-width:100%;height:auto;display:inline-block;margin:10rpx auto;"');
-  return newContent;
-}
-
-/***/ }),
-
-/***/ 106:
-/*!******************************************!*\
-  !*** E:/微信小程序/购物车测试/utils/htmlparser.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; /*
-                                                                                                      * HTML5 Parser By Sam Blowes
-                                                                                                      *
-                                                                                                      * Designed for HTML5 documents
-                                                                                                      *
-                                                                                                      * Original code by John Resig (ejohn.org)
-                                                                                                      * http://ejohn.org/blog/pure-javascript-html-parser/
-                                                                                                      * Original code by Erik Arvidsson, Mozilla Public License
-                                                                                                      * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
-                                                                                                      *
-                                                                                                      * ----------------------------------------------------------------------------
-                                                                                                      * License
-                                                                                                      * ----------------------------------------------------------------------------
-                                                                                                      *
-                                                                                                      * This code is triple licensed using Apache Software License 2.0,
-                                                                                                      * Mozilla Public License or GNU Public License
-                                                                                                      *
-                                                                                                      * ////////////////////////////////////////////////////////////////////////////
-                                                                                                      *
-                                                                                                      * Licensed under the Apache License, Version 2.0 (the "License"); you may not
-                                                                                                      * use this file except in compliance with the License.  You may obtain a copy
-                                                                                                      * of the License at http://www.apache.org/licenses/LICENSE-2.0
-                                                                                                      *
-                                                                                                      * ////////////////////////////////////////////////////////////////////////////
-                                                                                                      *
-                                                                                                      * The contents of this file are subject to the Mozilla Public License
-                                                                                                      * Version 1.1 (the "License"); you may not use this file except in
-                                                                                                      * compliance with the License. You may obtain a copy of the License at
-                                                                                                      * http://www.mozilla.org/MPL/
-                                                                                                      *
-                                                                                                      * Software distributed under the License is distributed on an "AS IS"
-                                                                                                      * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-                                                                                                      * License for the specific language governing rights and limitations
-                                                                                                      * under the License.
-                                                                                                      *
-                                                                                                      * The Original Code is Simple HTML Parser.
-                                                                                                      *
-                                                                                                      * The Initial Developer of the Original Code is Erik Arvidsson.
-                                                                                                      * Portions created by Erik Arvidssson are Copyright (C) 2004. All Rights
-                                                                                                      * Reserved.
-                                                                                                      *
-                                                                                                      * ////////////////////////////////////////////////////////////////////////////
-                                                                                                      *
-                                                                                                      * This program is free software; you can redistribute it and/or
-                                                                                                      * modify it under the terms of the GNU General Public License
-                                                                                                      * as published by the Free Software Foundation; either version 2
-                                                                                                      * of the License, or (at your option) any later version.
-                                                                                                      *
-                                                                                                      * This program is distributed in the hope that it will be useful,
-                                                                                                      * but WITHOUT ANY WARRANTY; without even the implied warranty of
-                                                                                                      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-                                                                                                      * GNU General Public License for more details.
-                                                                                                      *
-                                                                                                      * You should have received a copy of the GNU General Public License
-                                                                                                      * along with this program; if not, write to the Free Software
-                                                                                                      * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-                                                                                                      *
-                                                                                                      * ----------------------------------------------------------------------------
-                                                                                                      * Usage
-                                                                                                      * ----------------------------------------------------------------------------
-                                                                                                      *
-                                                                                                      * // Use like so:
-                                                                                                      * HTMLParser(htmlString, {
-                                                                                                      *     start: function(tag, attrs, unary) {},
-                                                                                                      *     end: function(tag) {},
-                                                                                                      *     chars: function(text) {},
-                                                                                                      *     comment: function(text) {}
-                                                                                                      * });
-                                                                                                      *
-                                                                                                      * // or to get an XML string:
-                                                                                                      * HTMLtoXML(htmlString);
-                                                                                                      *
-                                                                                                      * // or to get an XML DOM Document
-                                                                                                      * HTMLtoDOM(htmlString);
-                                                                                                      *
-                                                                                                      * // or to inject into an existing document/DOM node
-                                                                                                      * HTMLtoDOM(htmlString, document);
-                                                                                                      * HTMLtoDOM(htmlString, document.body);
-                                                                                                      *
-                                                                                                      */
-// Regular Expressions for parsing tags and attributes
-var startTag = /^<([-A-Za-z0-9_]+)((?:\s+[a-zA-Z_:][-a-zA-Z0-9_:.]*(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/;
-var endTag = /^<\/([-A-Za-z0-9_]+)[^>]*>/;
-var attr = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g; // Empty Elements - HTML 5
-
-var empty = makeMap('area,base,basefont,br,col,frame,hr,img,input,link,meta,param,embed,command,keygen,source,track,wbr'); // Block Elements - HTML 5
-// fixed by xxx 将 ins 标签从块级名单中移除
-
-var block = makeMap('a,address,article,applet,aside,audio,blockquote,button,canvas,center,dd,del,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frameset,h1,h2,h3,h4,h5,h6,header,hgroup,hr,iframe,isindex,li,map,menu,noframes,noscript,object,ol,output,p,pre,section,script,table,tbody,td,tfoot,th,thead,tr,ul,video'); // Inline Elements - HTML 5
-
-var inline = makeMap('abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'); // Elements that you can, intentionally, leave open
-// (and which close themselves)
-
-var closeSelf = makeMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr'); // Attributes that have their values filled in disabled="disabled"
-
-var fillAttrs = makeMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'); // Special Elements (can contain anything)
-
-var special = makeMap('script,style');
-function HTMLParser(html, handler) {
-  var index;
-  var chars;
-  var match;
-  var stack = [];
-  var last = html;
-
-  stack.last = function () {
-    return this[this.length - 1];
-  };
-
-  while (html) {
-    chars = true; // Make sure we're not in a script or style element
-
-    if (!stack.last() || !special[stack.last()]) {
-      // Comment
-      if (html.indexOf('<!--') == 0) {
-        index = html.indexOf('-->');
-
-        if (index >= 0) {
-          if (handler.comment) {
-            handler.comment(html.substring(4, index));
-          }
-
-          html = html.substring(index + 3);
-          chars = false;
-        } // end tag
-
-      } else if (html.indexOf('</') == 0) {
-        match = html.match(endTag);
-
-        if (match) {
-          html = html.substring(match[0].length);
-          match[0].replace(endTag, parseEndTag);
-          chars = false;
-        } // start tag
-
-      } else if (html.indexOf('<') == 0) {
-        match = html.match(startTag);
-
-        if (match) {
-          html = html.substring(match[0].length);
-          match[0].replace(startTag, parseStartTag);
-          chars = false;
-        }
-      }
-
-      if (chars) {
-        index = html.indexOf('<');
-        var text = index < 0 ? html : html.substring(0, index);
-        html = index < 0 ? '' : html.substring(index);
-
-        if (handler.chars) {
-          handler.chars(text);
-        }
-      }
-    } else {
-      html = html.replace(new RegExp('([\\s\\S]*?)<\/' + stack.last() + '[^>]*>'), function (all, text) {
-        text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, '$1$2');
-
-        if (handler.chars) {
-          handler.chars(text);
-        }
-
-        return '';
-      });
-      parseEndTag('', stack.last());
-    }
-
-    if (html == last) {
-      throw 'Parse Error: ' + html;
-    }
-
-    last = html;
-  } // Clean up any remaining tags
-
-
-  parseEndTag();
-
-  function parseStartTag(tag, tagName, rest, unary) {
-    tagName = tagName.toLowerCase();
-
-    if (block[tagName]) {
-      while (stack.last() && inline[stack.last()]) {
-        parseEndTag('', stack.last());
-      }
-    }
-
-    if (closeSelf[tagName] && stack.last() == tagName) {
-      parseEndTag('', tagName);
-    }
-
-    unary = empty[tagName] || !!unary;
-
-    if (!unary) {
-      stack.push(tagName);
-    }
-
-    if (handler.start) {
-      var attrs = [];
-      rest.replace(attr, function (match, name) {
-        var value = arguments[2] ? arguments[2] : arguments[3] ? arguments[3] : arguments[4] ? arguments[4] : fillAttrs[name] ? name : '';
-        attrs.push({
-          name: name,
-          value: value,
-          escaped: value.replace(/(^|[^\\])"/g, '$1\\\"') // "
-        });
-
-      });
-
-      if (handler.start) {
-        handler.start(tagName, attrs, unary);
-      }
-    }
-  }
-
-  function parseEndTag(tag, tagName) {
-    // If no tag name is provided, clean shop
-    if (!tagName) {
-      var pos = 0;
-    } // Find the closest opened tag of the same type
-    else {
-        for (var pos = stack.length - 1; pos >= 0; pos--) {
-          if (stack[pos] == tagName) {
-            break;
-          }
-        }
-      }
-
-    if (pos >= 0) {
-      // Close all the open elements, up the stack
-      for (var i = stack.length - 1; i >= pos; i--) {
-        if (handler.end) {
-          handler.end(stack[i]);
-        }
-      } // Remove the open elements from the stack
-
-
-      stack.length = pos;
-    }
-  }
-}
-
-function makeMap(str) {
-  var obj = {};
-  var items = str.split(',');
-
-  for (var i = 0; i < items.length; i++) {
-    obj[items[i]] = true;
-  }
-
-  return obj;
-}
-
-function removeDOCTYPE(html) {
-  return html.replace(/<\?xml.*\?>\n/, '').replace(/<!doctype.*>\n/, '').replace(/<!DOCTYPE.*>\n/, '');
-}
-
-function parseAttrs(attrs) {
-  return attrs.reduce(function (pre, attr) {
-    var value = attr.value;
-    var name = attr.name;
-
-    if (pre[name]) {
-      pre[name] = pre[name] + " " + value;
-    } else {
-      pre[name] = value;
-    }
-
-    return pre;
-  }, {});
-}
-
-function parseHtml(html) {
-  html = removeDOCTYPE(html);
-  var stacks = [];
-  var results = {
-    node: 'root',
-    children: [] };
-
-  HTMLParser(html, {
-    start: function start(tag, attrs, unary) {
-      var node = {
-        name: tag };
-
-
-      if (attrs.length !== 0) {
-        node.attrs = parseAttrs(attrs);
-      }
-
-      if (unary) {
-        var parent = stacks[0] || results;
-
-        if (!parent.children) {
-          parent.children = [];
-        }
-
-        parent.children.push(node);
-      } else {
-        stacks.unshift(node);
-      }
-    },
-    end: function end(tag) {
-      var node = stacks.shift();
-      if (node.name !== tag) console.error('invalid state: mismatch end tag');
-
-      if (stacks.length === 0) {
-        results.children.push(node);
-      } else {
-        var parent = stacks[0];
-
-        if (!parent.children) {
-          parent.children = [];
-        }
-
-        parent.children.push(node);
-      }
-    },
-    chars: function chars(text) {
-      var node = {
-        type: 'text',
-        text: text };
-
-
-      if (stacks.length === 0) {
-        results.children.push(node);
-      } else {
-        var parent = stacks[0];
-
-        if (!parent.children) {
-          parent.children = [];
-        }
-
-        parent.children.push(node);
-      }
-    },
-    comment: function comment(text) {
-      var node = {
-        node: 'comment',
-        text: text };
-
-      var parent = stacks[0];
-
-      if (!parent.children) {
-        parent.children = [];
-      }
-
-      parent.children.push(node);
-    } });
-
-  return results.children;
-}var _default =
-
-parseHtml;exports.default = _default;
-
-/***/ }),
-
-/***/ 11:
-/*!*************************************!*\
-  !*** E:/微信小程序/购物车测试/store/index.js ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
-var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-_vue.default.use(_vuex.default);
-var store = new _vuex.default.Store({
-  state: {
-    carts: uni.getStorageSync('carts') || [],
-    checkList: uni.getStorageSync('carts') || [] },
-
-  mutations: {
-    //将商品加购
-    addToCarts: function addToCarts(state, good) {
-      var currentGood = state.carts.find(function (item) {
-        if (item.alias == good.alias) {
-          return item;
-        }
-      });
-      if (currentGood) {
-        currentGood.buynum += good.buynum;
-      } else {
-        state.carts.push(good);
-      }
-      uni.setStorageSync('carts', state.carts);
-    },
-
-    //加购商品数量改变时保存数量
-    changeCarts: function changeCarts(state, newgood) {
-      var currentGood = state.carts.find(function (item) {
-        if (item.alias == newgood.alias) {
-          return item;
-        }
-      });
-      if (currentGood) {
-        currentGood.buynum = newgood.buynum;
-      } else {
-        state.carts.push(newgood);
-      }
-      uni.setStorageSync('carts', state.carts);
-    },
-
-    //加购商品被删时保存剩下的
-    insteadcarts: function insteadcarts(state, payload) {
-      uni.setStorageSync('carts', state.carts);
-      console.log("保存成功");
-    } },
-
-  actions: {} });var _default =
-
-store;exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -10609,7 +10327,398 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 78:
+/***/ 44:
+/*!**************************************!*\
+  !*** E:/微信小程序/购物车测试/utils/format.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.formatRichText = formatRichText;function formatRichText(html) {
+  var html = new String(html);
+  var newContent = html.replace(/<img[^>]*>/gi, function (match, capture) {
+    match = match.replace(/style="[^"]+"/gi, '').replace(/style='[^']+'/gi, '');
+    match = match.replace(/width="[^"]+"/gi, '').replace(/width='[^']+'/gi, '');
+    match = match.replace(/height="[^"]+"/gi, '').replace(/height='[^']+'/gi, '');
+    return match;
+  });
+  newContent = newContent.replace(/style="[^"]+"/gi, function (match, capture) {
+    match = match.replace(/width:[^;]+;/gi, 'max-width:100%;').replace(/width:[^;]+;/gi, 'max-width:100%;');
+    return match;
+  });
+  newContent = newContent.replace(/<br[^>]*\/>/gi, '');
+  newContent = newContent.replace(/\<img/gi,
+  '<img style="max-width:100%;height:auto;display:inline-block;margin:10rpx auto;"');
+  return newContent;
+}
+
+/***/ }),
+
+/***/ 45:
+/*!******************************************!*\
+  !*** E:/微信小程序/购物车测试/utils/htmlparser.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; /*
+                                                                                                      * HTML5 Parser By Sam Blowes
+                                                                                                      *
+                                                                                                      * Designed for HTML5 documents
+                                                                                                      *
+                                                                                                      * Original code by John Resig (ejohn.org)
+                                                                                                      * http://ejohn.org/blog/pure-javascript-html-parser/
+                                                                                                      * Original code by Erik Arvidsson, Mozilla Public License
+                                                                                                      * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+                                                                                                      *
+                                                                                                      * ----------------------------------------------------------------------------
+                                                                                                      * License
+                                                                                                      * ----------------------------------------------------------------------------
+                                                                                                      *
+                                                                                                      * This code is triple licensed using Apache Software License 2.0,
+                                                                                                      * Mozilla Public License or GNU Public License
+                                                                                                      *
+                                                                                                      * ////////////////////////////////////////////////////////////////////////////
+                                                                                                      *
+                                                                                                      * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+                                                                                                      * use this file except in compliance with the License.  You may obtain a copy
+                                                                                                      * of the License at http://www.apache.org/licenses/LICENSE-2.0
+                                                                                                      *
+                                                                                                      * ////////////////////////////////////////////////////////////////////////////
+                                                                                                      *
+                                                                                                      * The contents of this file are subject to the Mozilla Public License
+                                                                                                      * Version 1.1 (the "License"); you may not use this file except in
+                                                                                                      * compliance with the License. You may obtain a copy of the License at
+                                                                                                      * http://www.mozilla.org/MPL/
+                                                                                                      *
+                                                                                                      * Software distributed under the License is distributed on an "AS IS"
+                                                                                                      * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+                                                                                                      * License for the specific language governing rights and limitations
+                                                                                                      * under the License.
+                                                                                                      *
+                                                                                                      * The Original Code is Simple HTML Parser.
+                                                                                                      *
+                                                                                                      * The Initial Developer of the Original Code is Erik Arvidsson.
+                                                                                                      * Portions created by Erik Arvidssson are Copyright (C) 2004. All Rights
+                                                                                                      * Reserved.
+                                                                                                      *
+                                                                                                      * ////////////////////////////////////////////////////////////////////////////
+                                                                                                      *
+                                                                                                      * This program is free software; you can redistribute it and/or
+                                                                                                      * modify it under the terms of the GNU General Public License
+                                                                                                      * as published by the Free Software Foundation; either version 2
+                                                                                                      * of the License, or (at your option) any later version.
+                                                                                                      *
+                                                                                                      * This program is distributed in the hope that it will be useful,
+                                                                                                      * but WITHOUT ANY WARRANTY; without even the implied warranty of
+                                                                                                      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                                                                                                      * GNU General Public License for more details.
+                                                                                                      *
+                                                                                                      * You should have received a copy of the GNU General Public License
+                                                                                                      * along with this program; if not, write to the Free Software
+                                                                                                      * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+                                                                                                      *
+                                                                                                      * ----------------------------------------------------------------------------
+                                                                                                      * Usage
+                                                                                                      * ----------------------------------------------------------------------------
+                                                                                                      *
+                                                                                                      * // Use like so:
+                                                                                                      * HTMLParser(htmlString, {
+                                                                                                      *     start: function(tag, attrs, unary) {},
+                                                                                                      *     end: function(tag) {},
+                                                                                                      *     chars: function(text) {},
+                                                                                                      *     comment: function(text) {}
+                                                                                                      * });
+                                                                                                      *
+                                                                                                      * // or to get an XML string:
+                                                                                                      * HTMLtoXML(htmlString);
+                                                                                                      *
+                                                                                                      * // or to get an XML DOM Document
+                                                                                                      * HTMLtoDOM(htmlString);
+                                                                                                      *
+                                                                                                      * // or to inject into an existing document/DOM node
+                                                                                                      * HTMLtoDOM(htmlString, document);
+                                                                                                      * HTMLtoDOM(htmlString, document.body);
+                                                                                                      *
+                                                                                                      */
+// Regular Expressions for parsing tags and attributes
+var startTag = /^<([-A-Za-z0-9_]+)((?:\s+[a-zA-Z_:][-a-zA-Z0-9_:.]*(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/;
+var endTag = /^<\/([-A-Za-z0-9_]+)[^>]*>/;
+var attr = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/g; // Empty Elements - HTML 5
+
+var empty = makeMap('area,base,basefont,br,col,frame,hr,img,input,link,meta,param,embed,command,keygen,source,track,wbr'); // Block Elements - HTML 5
+// fixed by xxx 将 ins 标签从块级名单中移除
+
+var block = makeMap('a,address,article,applet,aside,audio,blockquote,button,canvas,center,dd,del,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frameset,h1,h2,h3,h4,h5,h6,header,hgroup,hr,iframe,isindex,li,map,menu,noframes,noscript,object,ol,output,p,pre,section,script,table,tbody,td,tfoot,th,thead,tr,ul,video'); // Inline Elements - HTML 5
+
+var inline = makeMap('abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'); // Elements that you can, intentionally, leave open
+// (and which close themselves)
+
+var closeSelf = makeMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr'); // Attributes that have their values filled in disabled="disabled"
+
+var fillAttrs = makeMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'); // Special Elements (can contain anything)
+
+var special = makeMap('script,style');
+function HTMLParser(html, handler) {
+  var index;
+  var chars;
+  var match;
+  var stack = [];
+  var last = html;
+
+  stack.last = function () {
+    return this[this.length - 1];
+  };
+
+  while (html) {
+    chars = true; // Make sure we're not in a script or style element
+
+    if (!stack.last() || !special[stack.last()]) {
+      // Comment
+      if (html.indexOf('<!--') == 0) {
+        index = html.indexOf('-->');
+
+        if (index >= 0) {
+          if (handler.comment) {
+            handler.comment(html.substring(4, index));
+          }
+
+          html = html.substring(index + 3);
+          chars = false;
+        } // end tag
+
+      } else if (html.indexOf('</') == 0) {
+        match = html.match(endTag);
+
+        if (match) {
+          html = html.substring(match[0].length);
+          match[0].replace(endTag, parseEndTag);
+          chars = false;
+        } // start tag
+
+      } else if (html.indexOf('<') == 0) {
+        match = html.match(startTag);
+
+        if (match) {
+          html = html.substring(match[0].length);
+          match[0].replace(startTag, parseStartTag);
+          chars = false;
+        }
+      }
+
+      if (chars) {
+        index = html.indexOf('<');
+        var text = index < 0 ? html : html.substring(0, index);
+        html = index < 0 ? '' : html.substring(index);
+
+        if (handler.chars) {
+          handler.chars(text);
+        }
+      }
+    } else {
+      html = html.replace(new RegExp('([\\s\\S]*?)<\/' + stack.last() + '[^>]*>'), function (all, text) {
+        text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, '$1$2');
+
+        if (handler.chars) {
+          handler.chars(text);
+        }
+
+        return '';
+      });
+      parseEndTag('', stack.last());
+    }
+
+    if (html == last) {
+      throw 'Parse Error: ' + html;
+    }
+
+    last = html;
+  } // Clean up any remaining tags
+
+
+  parseEndTag();
+
+  function parseStartTag(tag, tagName, rest, unary) {
+    tagName = tagName.toLowerCase();
+
+    if (block[tagName]) {
+      while (stack.last() && inline[stack.last()]) {
+        parseEndTag('', stack.last());
+      }
+    }
+
+    if (closeSelf[tagName] && stack.last() == tagName) {
+      parseEndTag('', tagName);
+    }
+
+    unary = empty[tagName] || !!unary;
+
+    if (!unary) {
+      stack.push(tagName);
+    }
+
+    if (handler.start) {
+      var attrs = [];
+      rest.replace(attr, function (match, name) {
+        var value = arguments[2] ? arguments[2] : arguments[3] ? arguments[3] : arguments[4] ? arguments[4] : fillAttrs[name] ? name : '';
+        attrs.push({
+          name: name,
+          value: value,
+          escaped: value.replace(/(^|[^\\])"/g, '$1\\\"') // "
+        });
+
+      });
+
+      if (handler.start) {
+        handler.start(tagName, attrs, unary);
+      }
+    }
+  }
+
+  function parseEndTag(tag, tagName) {
+    // If no tag name is provided, clean shop
+    if (!tagName) {
+      var pos = 0;
+    } // Find the closest opened tag of the same type
+    else {
+        for (var pos = stack.length - 1; pos >= 0; pos--) {
+          if (stack[pos] == tagName) {
+            break;
+          }
+        }
+      }
+
+    if (pos >= 0) {
+      // Close all the open elements, up the stack
+      for (var i = stack.length - 1; i >= pos; i--) {
+        if (handler.end) {
+          handler.end(stack[i]);
+        }
+      } // Remove the open elements from the stack
+
+
+      stack.length = pos;
+    }
+  }
+}
+
+function makeMap(str) {
+  var obj = {};
+  var items = str.split(',');
+
+  for (var i = 0; i < items.length; i++) {
+    obj[items[i]] = true;
+  }
+
+  return obj;
+}
+
+function removeDOCTYPE(html) {
+  return html.replace(/<\?xml.*\?>\n/, '').replace(/<!doctype.*>\n/, '').replace(/<!DOCTYPE.*>\n/, '');
+}
+
+function parseAttrs(attrs) {
+  return attrs.reduce(function (pre, attr) {
+    var value = attr.value;
+    var name = attr.name;
+
+    if (pre[name]) {
+      pre[name] = pre[name] + " " + value;
+    } else {
+      pre[name] = value;
+    }
+
+    return pre;
+  }, {});
+}
+
+function parseHtml(html) {
+  html = removeDOCTYPE(html);
+  var stacks = [];
+  var results = {
+    node: 'root',
+    children: [] };
+
+  HTMLParser(html, {
+    start: function start(tag, attrs, unary) {
+      var node = {
+        name: tag };
+
+
+      if (attrs.length !== 0) {
+        node.attrs = parseAttrs(attrs);
+      }
+
+      if (unary) {
+        var parent = stacks[0] || results;
+
+        if (!parent.children) {
+          parent.children = [];
+        }
+
+        parent.children.push(node);
+      } else {
+        stacks.unshift(node);
+      }
+    },
+    end: function end(tag) {
+      var node = stacks.shift();
+      if (node.name !== tag) console.error('invalid state: mismatch end tag');
+
+      if (stacks.length === 0) {
+        results.children.push(node);
+      } else {
+        var parent = stacks[0];
+
+        if (!parent.children) {
+          parent.children = [];
+        }
+
+        parent.children.push(node);
+      }
+    },
+    chars: function chars(text) {
+      var node = {
+        type: 'text',
+        text: text };
+
+
+      if (stacks.length === 0) {
+        results.children.push(node);
+      } else {
+        var parent = stacks[0];
+
+        if (!parent.children) {
+          parent.children = [];
+        }
+
+        parent.children.push(node);
+      }
+    },
+    comment: function comment(text) {
+      var node = {
+        node: 'comment',
+        text: text };
+
+      var parent = stacks[0];
+
+      if (!parent.children) {
+        parent.children = [];
+      }
+
+      parent.children.push(node);
+    } });
+
+  return results.children;
+}var _default =
+
+parseHtml;exports.default = _default;
+
+/***/ }),
+
+/***/ 80:
 /*!***********************************************************************!*\
   !*** E:/微信小程序/购物车测试/components/uni-ui/uni-swipe-action-item/mpwxs.js ***!
   \***********************************************************************/

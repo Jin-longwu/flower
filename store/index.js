@@ -4,7 +4,11 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
 		carts: uni.getStorageSync('carts') || [],
-		checkList: uni.getStorageSync('carts') || []
+		user_address: {
+			province: '',
+			city: '',
+			district: ''
+		}
 	},
 	mutations: {
 		//将商品加购
@@ -42,6 +46,11 @@ const store = new Vuex.Store({
 			uni.setStorageSync('carts', state.carts)
 			console.log("保存成功")
 		},
+
+
+		commit_address(state, data) {
+			state.user_address = data;
+		}
 	},
 	actions: {}
 })
