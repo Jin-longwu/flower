@@ -231,7 +231,9 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
   (0, _vuex.mapMutations)({
     addToCarts: "addToCarts",
     changeCarts: "changeCarts",
-    insteadcarts: "insteadcarts" })), {}, {
+    insteadcarts: "insteadcarts",
+    addToShop: "addToShop",
+    insteadshop: "insteadshop" })), {}, {
 
     gofirst: function gofirst() {
       uni.switchTab({
@@ -249,9 +251,24 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
         content: '是否删除',
         success: function success(res) {
           if (res.confirm) {
+            if (_this.$refs.checkbox[index].checked) {
+
+              for (var i = 0; i < _this.carts.length; i++) {
+                for (var j = 0; j < _this.shop.length; j++) {
+                  if (_this.shop[j].alias == _this.carts[i].alias) {
+                    _this.shop.splice(j, 1);
+                    _this.insteadshop({
+                      step: 0 });
+
+                  }
+                }
+              }
+
+            }
             _this.carts.splice(index, 1);
             _this.insteadcarts({
               step: index });
+
 
             if (_this.carts.length.toString() == 0) {
               _this.show = true;
@@ -267,6 +284,11 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
     changeBoxFromPage: function changeBoxFromPage(index) {
       if (this.$refs.checkbox[index].checked) {
         this.$refs.checkbox[index].checked = this.pageChecked;
+        this.shop.splice(0, this.shop.length);
+        this.insteadshop({
+          step: index });
+
+        this.$refs.checkboxall.checked = false;
         for (var i = 0; i < this.carts.length; i++) {
           if (this.$refs.checkbox[i].checked) {
             this.accountflag = true;
@@ -276,9 +298,11 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
           }
         }
         this.getAccount();
+        this.getShoplist();
       } else {
         this.$refs.checkbox[index].checked = !this.pageChecked;
         this.accountflag = true;
+        this.account = this.carts[index].sellprice * this.carts[index].buynum;
         if (this.carts.length == 1) {
           this.accountflag = true;
           this.$refs.checkboxall.checked = true;
@@ -297,19 +321,10 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
 
         }
 
-
-
-        // for (var q = 0; q < this.carts.length; q++) {
-        // 	if ((q < index && !this.$refs.checkbox[q].checked) && (q == index==0||q == index && this.$refs.checkbox[q].checked) && (q >
-        // 			index && !this.$refs.checkbox[q].checked)) {
-        // 		this.account = this.carts[q].sellprice * this.carts[q].buynum
-        // 		console.log("aaaaaaaaaaaaaaaaaaa")
-        // }
       }
 
-
-
       this.getAccount();
+      this.getShoplist();
     },
 
 
@@ -320,6 +335,7 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
           this.$refs.checkbox[i].checked = !this.pageChecked;
         }
         this.getAccount();
+        this.getShoplist();
       } else {
         this.$refs.checkboxall.checked = this.pageChecked;
         for (var i = 0; i < this.carts.length; i++) {
@@ -327,6 +343,10 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
         }
         this.account = 0;
         this.accountflag = false;
+        this.shop.splice(0, this.shop.length);
+        this.insteadshop({
+          step: 0 });
+
       }
     },
     reduce: function reduce(index) {
@@ -351,6 +371,7 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
 
         this.changeCarts(newgood);
         this.getAccount();
+        this.getShoplist();
       }
 
     },
@@ -369,6 +390,7 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
 
       this.changeCarts(newgood);
       this.getAccount();
+      this.getShoplist();
     },
     gopay: function gopay() {
       uni.navigateTo({
@@ -399,6 +421,7 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
                     total = _this4.carts[0].sellprice * _this4.carts[0].buynum;
                   } else {
                     _this4.$refs.checkboxall.checked = _this4.pageChecked;
+                    _this4.accountflag = false;
                     total = 0;
                   }
                 } else if (_this4.carts.length > 1) {
@@ -412,18 +435,48 @@ var _request = __webpack_require__(/*! @/utils/request.js */ 23);function _inter
                 }
 
                 _this4.account = total;case 3:case "end":return _context3.stop();}}}, _callee3);}))();
+    },
+
+
+    getShoplist: function getShoplist() {var _this5 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {var z, shoplist;return _regenerator.default.wrap(function _callee4$(_context4) {while (1) {switch (_context4.prev = _context4.next) {case 0:
+                if (_this5.carts.length == 0) {
+                  _this5.shop = [];
+                } else if (_this5.carts.length > 0) {
+                  for (z = 0; z < _this5.carts.length; z++) {
+                    if (_this5.$refs.checkbox[z].checked) {
+                      shoplist = {
+                        alias: _this5.carts[z].alias,
+                        sellprice: _this5.carts[z].sellprice,
+                        buynum: _this5.carts[z].buynum,
+                        title: _this5.carts[z].title,
+                        img: _this5.carts[z].img };
+
+                      _this5.addToShop(shoplist);
+                    }
+                  }
+                }
+                console.log(_this5.shop, "这是要结算的商品");case 2:case "end":return _context4.stop();}}}, _callee4);}))();
     } }),
 
   computed: _objectSpread({},
   (0, _vuex.mapState)({
-    carts: "carts" })),
+    carts: "carts",
+    shop: "shop" })),
 
 
   onShow: function onShow() {
     this.judge();
     this.account = 0;
+    this.accountflag = false;
     this.getProducts();
+    this.getShoplist();
+    this.shop.splice(0, this.shop.length);
+    this.insteadshop({
+      step: 0 });
 
+    for (var i = 0; i < this.carts.length; i++) {
+      this.$refs.checkbox[i].checked = false;
+    }
   },
   onLoad: function onLoad() {
     this.getProducts();

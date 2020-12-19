@@ -4,7 +4,7 @@
 			<view class="bg"></view>
 			<view class="paymoney">
 				<image @click="close" src="@/static/icon/cha.png" mode=""></image>
-				<text class="big">$6666</text>
+				<text class="big">￥{{account}}</text>
 				<view class="phone">
 					<text class="left">支付账号</text>
 					<text class="right">182******76</text>
@@ -14,7 +14,7 @@
 					<text class="right">余额</text>
 				</view>
 				<button class="btn" @tap="show = true" type="default">立即付款</button>
-				<passkeyborad :show="show" @close="closekey"></passkeyborad>
+				<passkeyborad :show="show" @close="closekey" :account="account"></passkeyborad>
 			</view>
 		</view>
 		<view class="pay">
@@ -23,12 +23,20 @@
 		</view>
 		<view class="address">
 			<image class="icon" src="@/static/icon/address.png"></image>
-			<button class="popup-btn" @tap="popup_bottom()">请选择收货地址</button>
-			<view>{{address}}</view>
+			<view class="msg">
+				<view class="mymsg">
+					<text class="name">老于</text>
+					<text class="tel">123321456654</text>
+				</view>
+				<image src="@/static/icon/you.png" @tap="popup_bottom()"></image>
+				<text class="place">{{address}}</text>
+				<text class="replace">收货不便时，可选择代存服务</text>
+			</view>
+			<!-- <button class="popup-btn" @tap="popup_bottom()">请选择收货地址</button> -->
 			<linkAddress ref="linkAddress" :height="height" @confirmCallback="confirmCallback()">
 			</linkAddress>
 		</view>
-		<view class="shop" v-for="(item,index) in carts" :key="index">
+		<view class="shop" v-for="(item,index) in shop" :key="index">
 			<view class="carts">
 				<text class=" cartstitle">{{item.title}}</text>
 				<text class="price">￥{{item.sellprice}}</text>
@@ -81,22 +89,29 @@
 		},
 		computed: {
 			...mapState({
-				carts: "carts",
+				shop: "shop"
 			})
 		},
 		data() {
 			return {
 				height: '500px',
-				address: '',
+				address: '安徽省合肥市瑶海区',
 				payflag: false,
-				show: false
+				show: false,
+				account: 0
 			}
 		},
 
-		onLoad() {
-
+		onShow() {
+			this.getaccount()
+			console.log(this.shop, "这是支付页面的商品")
 		},
 		methods: {
+			async getaccount() {
+				for (var i = 0; i < this.shop.length; i++) {
+					this.account += this.shop[i].sellprice * this.shop[i].buynum
+				}
+			},
 			closekey() {
 				this.show = false
 			},
@@ -109,9 +124,7 @@
 						if (res.confirm) {
 							this.payflag = false
 						} else if (res.cancel) {
-							uni.navigateTo({
-								url: "/pages//"
-							})
+
 						}
 					}
 				});
@@ -144,6 +157,10 @@
 		background-color: rgb(248, 248, 248) !important;
 		height: auto !important;
 		position: relative;
+
+		&:last-child {
+			margin-bottom: 70px;
+		}
 
 		.logo {
 			height: 200rpx;
@@ -286,6 +303,7 @@
 			background-color: white;
 			margin: 10px auto;
 
+
 			.other {
 				width: 640rpx;
 				height: 50rpx;
@@ -398,6 +416,58 @@
 			left: 50%;
 			margin-left: -160px;
 			margin-bottom: 25px;
+
+			.msg {
+				width: 270px;
+				height: 95px;
+				position: absolute;
+				left: 55px;
+				top: 10px;
+				font-size: 13px;
+
+				image {
+					width: 25px;
+					height: 25px;
+					position: absolute;
+					right: 15px;
+					top: 37px;
+				}
+
+				.replace {
+					position: absolute;
+					bottom: 15px;
+					left: 14px;
+					color: orangered;
+				}
+
+				.mymsg {
+					width: 230px;
+					position: absolute;
+					top: 10px;
+					left: 14px;
+
+					.name {
+						color: grey;
+					}
+
+					.tel {
+						margin-left: 15px;
+						color: grey;
+					}
+
+				}
+
+				.place {
+					width: 210px;
+					height: 45px;
+					position: absolute;
+					bottom: 26px;
+					color: grey;
+					left: 14px;
+					letter-spacing: 2px;
+					line-height: 45px;
+				}
+			}
 
 			.icon {
 				width: 35px !important;

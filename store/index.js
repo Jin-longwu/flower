@@ -8,7 +8,8 @@ const store = new Vuex.Store({
 			province: '',
 			city: '',
 			district: ''
-		}
+		},
+		shop: uni.getStorageSync('shop') || []
 	},
 	mutations: {
 		//将商品加购
@@ -50,7 +51,27 @@ const store = new Vuex.Store({
 
 		commit_address(state, data) {
 			state.user_address = data;
-		}
+		},
+
+		//增加要结算的商品
+		addToShop(state, shoplist) {
+			var currentGood = state.shop.find(item => {
+				if (item.alias == shoplist.alias) {
+					return item;
+				}
+			})
+			if (currentGood) {
+				currentGood.buynum = shoplist.buynum
+			} else {
+				state.shop.push(shoplist)
+			}
+			uni.setStorageSync('shop', state.shop)
+		},
+
+		insteadshop(state, payload) {
+			uni.setStorageSync('shop', state.shop)
+			console.log("保存成功")
+		},
 	},
 	actions: {}
 })

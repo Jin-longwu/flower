@@ -99,7 +99,9 @@
 			...mapMutations({
 				addToCarts: "addToCarts",
 				changeCarts: "changeCarts",
-				insteadcarts: "insteadcarts"
+				insteadcarts: "insteadcarts",
+				addToShop: "addToShop",
+				insteadshop: "insteadshop"
 			}),
 			gofirst() {
 				uni.switchTab({
@@ -117,10 +119,25 @@
 					content: '是否删除',
 					success: res => {
 						if (res.confirm) {
+							if (this.$refs.checkbox[index].checked) {
+
+								for (var i = 0; i < this.carts.length; i++) {
+									for (var j = 0; j < this.shop.length; j++) {
+										if (this.shop[j].alias == this.carts[i].alias) {
+											this.shop.splice(j, 1)
+											this.insteadshop({
+												step: 0
+											})
+										}
+									}
+								}
+
+							}
 							this.carts.splice(index, 1)
 							this.insteadcarts({
 								step: index
 							})
+
 							if (this.carts.length.toString() == 0) {
 								this.show = true
 								this.accountflag = false
@@ -135,6 +152,11 @@
 			changeBoxFromPage(index) {
 				if (this.$refs.checkbox[index].checked) {
 					this.$refs.checkbox[index].checked = this.pageChecked
+					this.shop.splice(0, this.shop.length)
+					this.insteadshop({
+						step: index
+					})
+					this.$refs.checkboxall.checked = false
 					for (var i = 0; i < this.carts.length; i++) {
 						if (this.$refs.checkbox[i].checked) {
 							this.accountflag = true
@@ -144,9 +166,11 @@
 						}
 					}
 					this.getAccount()
+					this.getShoplist()
 				} else {
 					this.$refs.checkbox[index].checked = !this.pageChecked
 					this.accountflag = true
+					this.account = this.carts[index].sellprice * this.carts[index].buynum
 					if (this.carts.length == 1) {
 						this.accountflag = true
 						this.$refs.checkboxall.checked = true
@@ -165,19 +189,10 @@
 
 					}
 
-
-
-					// for (var q = 0; q < this.carts.length; q++) {
-					// 	if ((q < index && !this.$refs.checkbox[q].checked) && (q == index==0||q == index && this.$refs.checkbox[q].checked) && (q >
-					// 			index && !this.$refs.checkbox[q].checked)) {
-					// 		this.account = this.carts[q].sellprice * this.carts[q].buynum
-					// 		console.log("aaaaaaaaaaaaaaaaaaa")
-					// }
 				}
 
-
-
 				this.getAccount()
+				this.getShoplist()
 			},
 
 
@@ -188,6 +203,7 @@
 						this.$refs.checkbox[i].checked = !this.pageChecked
 					}
 					this.getAccount()
+					this.getShoplist()
 				} else {
 					this.$refs.checkboxall.checked = this.pageChecked
 					for (var i = 0; i < this.carts.length; i++) {
@@ -195,6 +211,10 @@
 					}
 					this.account = 0
 					this.accountflag = false
+					this.shop.splice(0, this.shop.length)
+					this.insteadshop({
+						step: 0
+					})
 				}
 			},
 			reduce(index) {
@@ -219,6 +239,7 @@
 					}
 					this.changeCarts(newgood)
 					this.getAccount()
+					this.getShoplist()
 				}
 
 			},
@@ -237,6 +258,7 @@
 				}
 				this.changeCarts(newgood)
 				this.getAccount()
+				this.getShoplist()
 			},
 			gopay() {
 				uni.navigateTo({
@@ -267,6 +289,7 @@
 						total = this.carts[0].sellprice * this.carts[0].buynum
 					} else {
 						this.$refs.checkboxall.checked = this.pageChecked
+						this.accountflag = false
 						total = 0
 					}
 				} else if (this.carts.length > 1) {
@@ -280,18 +303,48 @@
 				}
 
 				this.account = total
+			},
+
+
+			async getShoplist() {
+				if (this.carts.length == 0) {
+					this.shop = []
+				} else if (this.carts.length > 0) {
+					for (var z = 0; z < this.carts.length; z++) {
+						if (this.$refs.checkbox[z].checked) {
+							var shoplist = {
+								alias: this.carts[z].alias,
+								sellprice: this.carts[z].sellprice,
+								buynum: this.carts[z].buynum,
+								title: this.carts[z].title,
+								img: this.carts[z].img
+							}
+							this.addToShop(shoplist)
+						}
+					}
+				}
+				console.log(this.shop, "这是要结算的商品")
 			}
 		},
 		computed: {
 			...mapState({
 				carts: "carts",
+				shop: "shop"
 			})
 		},
 		onShow() {
 			this.judge()
 			this.account = 0
+			this.accountflag = false
 			this.getProducts()
-
+			this.getShoplist()
+			this.shop.splice(0, this.shop.length)
+			this.insteadshop({
+				step: 0
+			})
+			for (var i = 0; i < this.carts.length; i++) {
+				this.$refs.checkbox[i].checked = false
+			}
 		},
 		onLoad() {
 			this.getProducts()

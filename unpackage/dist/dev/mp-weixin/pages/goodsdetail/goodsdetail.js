@@ -195,7 +195,8 @@ var _htmlparser = _interopRequireDefault(__webpack_require__(/*! @/utils/htmlpar
       htmlNodes: [],
       title: "",
       content: {},
-      lunboinfo: [] }, _defineProperty(_ref, "price",
+      lunboinfo: [],
+      shoplist: [] }, _defineProperty(_ref, "price",
     ""), _defineProperty(_ref, "buttonGroup",
     [{
       text: '加入购物车',
@@ -212,7 +213,9 @@ var _htmlparser = _interopRequireDefault(__webpack_require__(/*! @/utils/htmlpar
   },
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)({
-    addToCarts: 'addToCarts' })), {}, {
+    addToCarts: 'addToCarts',
+    addToShop: "addToShop" })), {}, {
+
 
     getDetail: function getDetail() {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var res;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
                   (0, _request.myRequestGet)('/wscgoods/weapp/detail.json?alias=' + _this.alias));case 2:res = _context.sent;
@@ -281,6 +284,15 @@ var _htmlparser = _interopRequireDefault(__webpack_require__(/*! @/utils/htmlpar
           duration: 2000 });
 
       } else {
+        var shoplist = {
+          alias: this.alias,
+          sellprice: this.price,
+          buynum: 1,
+          title: this.title,
+          img: this.lunboinfo[0].url };
+
+        this.addToShop(shoplist);
+        this.addToCarts(shoplist);
         uni.navigateTo({
           url: "/pages/pay/pay" });
 
@@ -309,7 +321,8 @@ var _htmlparser = _interopRequireDefault(__webpack_require__(/*! @/utils/htmlpar
   },
   computed: _objectSpread({},
   (0, _vuex.mapState)({
-    carts: "carts" })),
+    carts: "carts",
+    shop: "shop" })),
 
 
   components: {

@@ -64,6 +64,7 @@
 				title: "",
 				content: {},
 				lunboinfo: [],
+				shoplist: [],
 				price: "",
 				buttonGroup: [{
 						text: '加入购物车',
@@ -80,7 +81,9 @@
 		},
 		methods: {
 			...mapMutations({
-				addToCarts: 'addToCarts'
+				addToCarts: 'addToCarts',
+				addToShop: "addToShop",
+
 			}),
 			async getDetail() {
 				const res = await myRequestGet('/wscgoods/weapp/detail.json?alias=' + this.alias)
@@ -149,6 +152,15 @@
 						duration: 2000
 					})
 				} else {
+					var shoplist = {
+						alias: this.alias,
+						sellprice: this.price,
+						buynum: 1,
+						title: this.title,
+						img: this.lunboinfo[0].url
+					}
+					this.addToShop(shoplist)
+					this.addToCarts(shoplist)
 					uni.navigateTo({
 						url: "/pages/pay/pay"
 					})
@@ -178,6 +190,7 @@
 		computed: {
 			...mapState({
 				carts: "carts",
+				shop: "shop"
 			})
 		},
 		components: {

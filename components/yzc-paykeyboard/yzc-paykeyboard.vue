@@ -5,7 +5,7 @@
 		<!-- 金额 -->
 		<view :class="['content', show ? '' : 'contenthide']">
 			<view class="title">
-				<view class="close" @click="close()">
+				<view class="close" @click="close">
 					<image src="../../static/key/close.png" />
 				</view>
 				<view class="center">请输入支付密码</view>
@@ -13,7 +13,7 @@
 			</view>
 			<view class="pay-money">
 				<view>金额</view>
-				<view class="money">￥ <text>11</text></view>
+				<view class="money">￥ <text>{{account}}</text></view>
 			</view>
 			<view class="pay-way">
 				<view>支付方式</view>
@@ -45,6 +45,11 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations,
+		mapGetters
+	} from 'vuex'
 	export default {
 		props: {
 			show: {
@@ -55,23 +60,51 @@
 				type: Boolean,
 				default: false
 			},
+			account: {
+				type: Number,
+				default: 0
+			}
 		},
 		data() {
 			return {
 				password: '',
-				trantision: false
+				trantision: false,
 			};
 		},
+		computed: {
+			...mapState({
+				shop: "shop",
+				carts: "carts"
+			})
+		},
 		methods: {
+			...mapMutations({
+				insteadshop: "insteadshop",
+				insteadcarts: "insteadcarts",
+			}),
 			key(key) {
 				if (this.password.length < 6) {
 					this.password += key
 				}
 				if (this.password.length == 6) {
 					uni.showToast({
-							title: "支付成功！",
-							duration: 2000,
-							icon: true
+						title: "支付成功！",
+						duration: 2000,
+						icon: true
+					})
+					for (var i = 0; i < this.carts.length; i++) {
+						for (var j = 0; j < this.shop.length; j++) {
+							if (this.shop[j].alias == this.carts[i].alias) {
+								this.carts.splice(i, 1)
+								this.insteadcarts({
+									step: i
+								})
+							}
+						}
+					}
+					this.shop.splice(0, this.shop.length)
+					this.insteadshop({
+							step: 0
 						}),
 						setTimeout(() => {
 							uni.switchTab({

@@ -1935,106 +1935,6 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 104:
-/*!*******************************************************************!*\
-  !*** E:/微信小程序/购物车测试/static/xuan-linkAddress/get_linkAddress_p.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api = _interopRequireDefault(__webpack_require__(/*! @/components/xuan-linkAddress/api.js */ 105));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-  /*
-  *_this:全局this
-  * data:数据(参数)
-  * callback:回掉
-  */
-  get_linkAddress: function get_linkAddress(_this, tag, data, callback) {
-    //请求
-    _api.default.get_linkAddress_api(data).then(function (res) {
-      var revert = res.data.data;
-      console.log(revert);
-      if (res.data.code == 1) {
-        if (tag === "province") {
-          console.log("province");
-          _this.linkAddress_area[0].info = revert;
-          callback(true); //回掉
-        }
-        if (tag === "city") {
-          console.log("city");
-          _this.linkAddress_area[1].info = revert;
-          callback(true); //回掉
-        }
-        if (tag === "district") {
-          console.log("district");
-          _this.linkAddress_area[2].info = revert;
-          callback(true); //回掉
-        }
-      }
-    });
-  } };exports.default = _default;
-
-/***/ }),
-
-/***/ 105:
-/*!*********************************************************!*\
-  !*** E:/微信小程序/购物车测试/components/xuan-linkAddress/api.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _request = _interopRequireDefault(__webpack_require__(/*! @/static/xuan-linkAddress/request.js */ 106));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-//创建Request对象
-var request = new _request.default();var _default =
-
-{
-  //data 参数值
-  get_linkAddress_api: function get_linkAddress_api(data) {
-    console.log(data);
-    return request.http('/api/address/area', data, 'GET');
-  } };exports.default = _default;
-
-/***/ }),
-
-/***/ 106:
-/*!*********************************************************!*\
-  !*** E:/微信小程序/购物车测试/static/xuan-linkAddress/request.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);return Constructor;} //网络请求
-var Request = /*#__PURE__*/function () {function Request() {_classCallCheck(this, Request);}_createClass(Request, [{ key: "http",
-    /*
-                                                                                                                                  *paramete 参数
-                                                                                                                                  * data 参数值
-                                                                                                                                  * method 请求方式
-                                                                                                                                  */value: function http(
-    paramete, data, method) {
-      //根地址
-      var BASE_API = "http://admin.farmereasy.com";
-      return new Promise(function (resolve, reject) {
-        uni.request({
-          url: "".concat(BASE_API).concat(paramete),
-          data: data,
-          method: method,
-          success: function success(res) {
-            resolve(res);
-          },
-          fail: function fail(res) {
-            resolve(0);
-          } });
-
-      });
-    } }]);return Request;}();exports.default = Request;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
 /***/ 11:
 /*!*************************************!*\
   !*** E:/微信小程序/购物车测试/store/index.js ***!
@@ -2052,8 +1952,9 @@ var store = new _vuex.default.Store({
     user_address: {
       province: '',
       city: '',
-      district: '' } },
+      district: '' },
 
+    shop: uni.getStorageSync('shop') || [] },
 
   mutations: {
     //将商品加购
@@ -2095,6 +1996,26 @@ var store = new _vuex.default.Store({
 
     commit_address: function commit_address(state, data) {
       state.user_address = data;
+    },
+
+    //增加要结算的商品
+    addToShop: function addToShop(state, shoplist) {
+      var currentGood = state.shop.find(function (item) {
+        if (item.alias == shoplist.alias) {
+          return item;
+        }
+      });
+      if (currentGood) {
+        currentGood.buynum = shoplist.buynum;
+      } else {
+        state.shop.push(shoplist);
+      }
+      uni.setStorageSync('shop', state.shop);
+    },
+
+    insteadshop: function insteadshop(state, payload) {
+      uni.setStorageSync('shop', state.shop);
+      console.log("保存成功");
     } },
 
   actions: {} });var _default =
@@ -2104,145 +2025,103 @@ store;exports.default = _default;
 
 /***/ }),
 
-/***/ 114:
-/*!***********************************************************!*\
-  !*** E:/微信小程序/购物车测试/components/uni-ui/uni-icons/icons.js ***!
-  \***********************************************************/
+/***/ 111:
+/*!*******************************************************************!*\
+  !*** E:/微信小程序/购物车测试/static/xuan-linkAddress/get_linkAddress_p.js ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
-  "pulldown": "\uE588",
-  "refreshempty": "\uE461",
-  "back": "\uE471",
-  "forward": "\uE470",
-  "more": "\uE507",
-  "more-filled": "\uE537",
-  "scan": "\uE612",
-  "qq": "\uE264",
-  "weibo": "\uE260",
-  "weixin": "\uE261",
-  "pengyouquan": "\uE262",
-  "loop": "\uE565",
-  "refresh": "\uE407",
-  "refresh-filled": "\uE437",
-  "arrowthindown": "\uE585",
-  "arrowthinleft": "\uE586",
-  "arrowthinright": "\uE587",
-  "arrowthinup": "\uE584",
-  "undo-filled": "\uE7D6",
-  "undo": "\uE406",
-  "redo": "\uE405",
-  "redo-filled": "\uE7D9",
-  "bars": "\uE563",
-  "chatboxes": "\uE203",
-  "camera": "\uE301",
-  "chatboxes-filled": "\uE233",
-  "camera-filled": "\uE7EF",
-  "cart-filled": "\uE7F4",
-  "cart": "\uE7F5",
-  "checkbox-filled": "\uE442",
-  "checkbox": "\uE7FA",
-  "arrowleft": "\uE582",
-  "arrowdown": "\uE581",
-  "arrowright": "\uE583",
-  "smallcircle-filled": "\uE801",
-  "arrowup": "\uE580",
-  "circle": "\uE411",
-  "eye-filled": "\uE568",
-  "eye-slash-filled": "\uE822",
-  "eye-slash": "\uE823",
-  "eye": "\uE824",
-  "flag-filled": "\uE825",
-  "flag": "\uE508",
-  "gear-filled": "\uE532",
-  "reload": "\uE462",
-  "gear": "\uE502",
-  "hand-thumbsdown-filled": "\uE83B",
-  "hand-thumbsdown": "\uE83C",
-  "hand-thumbsup-filled": "\uE83D",
-  "heart-filled": "\uE83E",
-  "hand-thumbsup": "\uE83F",
-  "heart": "\uE840",
-  "home": "\uE500",
-  "info": "\uE504",
-  "home-filled": "\uE530",
-  "info-filled": "\uE534",
-  "circle-filled": "\uE441",
-  "chat-filled": "\uE847",
-  "chat": "\uE263",
-  "mail-open-filled": "\uE84D",
-  "email-filled": "\uE231",
-  "mail-open": "\uE84E",
-  "email": "\uE201",
-  "checkmarkempty": "\uE472",
-  "list": "\uE562",
-  "locked-filled": "\uE856",
-  "locked": "\uE506",
-  "map-filled": "\uE85C",
-  "map-pin": "\uE85E",
-  "map-pin-ellipse": "\uE864",
-  "map": "\uE364",
-  "minus-filled": "\uE440",
-  "mic-filled": "\uE332",
-  "minus": "\uE410",
-  "micoff": "\uE360",
-  "mic": "\uE302",
-  "clear": "\uE434",
-  "smallcircle": "\uE868",
-  "close": "\uE404",
-  "closeempty": "\uE460",
-  "paperclip": "\uE567",
-  "paperplane": "\uE503",
-  "paperplane-filled": "\uE86E",
-  "person-filled": "\uE131",
-  "contact-filled": "\uE130",
-  "person": "\uE101",
-  "contact": "\uE100",
-  "images-filled": "\uE87A",
-  "phone": "\uE200",
-  "images": "\uE87B",
-  "image": "\uE363",
-  "image-filled": "\uE877",
-  "location-filled": "\uE333",
-  "location": "\uE303",
-  "plus-filled": "\uE439",
-  "plus": "\uE409",
-  "plusempty": "\uE468",
-  "help-filled": "\uE535",
-  "help": "\uE505",
-  "navigate-filled": "\uE884",
-  "navigate": "\uE501",
-  "mic-slash-filled": "\uE892",
-  "search": "\uE466",
-  "settings": "\uE560",
-  "sound": "\uE590",
-  "sound-filled": "\uE8A1",
-  "spinner-cycle": "\uE465",
-  "download-filled": "\uE8A4",
-  "personadd-filled": "\uE132",
-  "videocam-filled": "\uE8AF",
-  "personadd": "\uE102",
-  "upload": "\uE402",
-  "upload-filled": "\uE8B1",
-  "starhalf": "\uE463",
-  "star-filled": "\uE438",
-  "star": "\uE408",
-  "trash": "\uE401",
-  "phone-filled": "\uE230",
-  "compose": "\uE400",
-  "videocam": "\uE300",
-  "trash-filled": "\uE8DC",
-  "download": "\uE403",
-  "chatbubble-filled": "\uE232",
-  "chatbubble": "\uE202",
-  "cloud-download": "\uE8E4",
-  "cloud-upload-filled": "\uE8E5",
-  "cloud-upload": "\uE8E6",
-  "cloud-download-filled": "\uE8E9",
-  "headphones": "\uE8BF",
-  "shop": "\uE609" };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api = _interopRequireDefault(__webpack_require__(/*! @/components/xuan-linkAddress/api.js */ 112));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+  /*
+  *_this:全局this
+  * data:数据(参数)
+  * callback:回掉
+  */
+  get_linkAddress: function get_linkAddress(_this, tag, data, callback) {
+    //请求
+    _api.default.get_linkAddress_api(data).then(function (res) {
+      var revert = res.data.data;
+      console.log(revert);
+      if (res.data.code == 1) {
+        if (tag === "province") {
+          console.log("province");
+          _this.linkAddress_area[0].info = revert;
+          callback(true); //回掉
+        }
+        if (tag === "city") {
+          console.log("city");
+          _this.linkAddress_area[1].info = revert;
+          callback(true); //回掉
+        }
+        if (tag === "district") {
+          console.log("district");
+          _this.linkAddress_area[2].info = revert;
+          callback(true); //回掉
+        }
+      }
+    });
+  } };exports.default = _default;
+
+/***/ }),
+
+/***/ 112:
+/*!*********************************************************!*\
+  !*** E:/微信小程序/购物车测试/components/xuan-linkAddress/api.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _request = _interopRequireDefault(__webpack_require__(/*! @/static/xuan-linkAddress/request.js */ 113));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+//创建Request对象
+var request = new _request.default();var _default =
+
+{
+  //data 参数值
+  get_linkAddress_api: function get_linkAddress_api(data) {
+    console.log(data);
+    return request.http('/api/address/area', data, 'GET');
+  } };exports.default = _default;
+
+/***/ }),
+
+/***/ 113:
+/*!*********************************************************!*\
+  !*** E:/微信小程序/购物车测试/static/xuan-linkAddress/request.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);return Constructor;} //网络请求
+var Request = /*#__PURE__*/function () {function Request() {_classCallCheck(this, Request);}_createClass(Request, [{ key: "http",
+    /*
+                                                                                                                                  *paramete 参数
+                                                                                                                                  * data 参数值
+                                                                                                                                  * method 请求方式
+                                                                                                                                  */value: function http(
+    paramete, data, method) {
+      //根地址
+      var BASE_API = "http://admin.farmereasy.com";
+      return new Promise(function (resolve, reject) {
+        uni.request({
+          url: "".concat(BASE_API).concat(paramete),
+          data: data,
+          method: method,
+          success: function success(res) {
+            resolve(res);
+          },
+          fail: function fail(res) {
+            resolve(0);
+          } });
+
+      });
+    } }]);return Request;}();exports.default = Request;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -3356,6 +3235,148 @@ var index = {
 
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ 3)))
+
+/***/ }),
+
+/***/ 121:
+/*!***********************************************************!*\
+  !*** E:/微信小程序/购物车测试/components/uni-ui/uni-icons/icons.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
+  "pulldown": "\uE588",
+  "refreshempty": "\uE461",
+  "back": "\uE471",
+  "forward": "\uE470",
+  "more": "\uE507",
+  "more-filled": "\uE537",
+  "scan": "\uE612",
+  "qq": "\uE264",
+  "weibo": "\uE260",
+  "weixin": "\uE261",
+  "pengyouquan": "\uE262",
+  "loop": "\uE565",
+  "refresh": "\uE407",
+  "refresh-filled": "\uE437",
+  "arrowthindown": "\uE585",
+  "arrowthinleft": "\uE586",
+  "arrowthinright": "\uE587",
+  "arrowthinup": "\uE584",
+  "undo-filled": "\uE7D6",
+  "undo": "\uE406",
+  "redo": "\uE405",
+  "redo-filled": "\uE7D9",
+  "bars": "\uE563",
+  "chatboxes": "\uE203",
+  "camera": "\uE301",
+  "chatboxes-filled": "\uE233",
+  "camera-filled": "\uE7EF",
+  "cart-filled": "\uE7F4",
+  "cart": "\uE7F5",
+  "checkbox-filled": "\uE442",
+  "checkbox": "\uE7FA",
+  "arrowleft": "\uE582",
+  "arrowdown": "\uE581",
+  "arrowright": "\uE583",
+  "smallcircle-filled": "\uE801",
+  "arrowup": "\uE580",
+  "circle": "\uE411",
+  "eye-filled": "\uE568",
+  "eye-slash-filled": "\uE822",
+  "eye-slash": "\uE823",
+  "eye": "\uE824",
+  "flag-filled": "\uE825",
+  "flag": "\uE508",
+  "gear-filled": "\uE532",
+  "reload": "\uE462",
+  "gear": "\uE502",
+  "hand-thumbsdown-filled": "\uE83B",
+  "hand-thumbsdown": "\uE83C",
+  "hand-thumbsup-filled": "\uE83D",
+  "heart-filled": "\uE83E",
+  "hand-thumbsup": "\uE83F",
+  "heart": "\uE840",
+  "home": "\uE500",
+  "info": "\uE504",
+  "home-filled": "\uE530",
+  "info-filled": "\uE534",
+  "circle-filled": "\uE441",
+  "chat-filled": "\uE847",
+  "chat": "\uE263",
+  "mail-open-filled": "\uE84D",
+  "email-filled": "\uE231",
+  "mail-open": "\uE84E",
+  "email": "\uE201",
+  "checkmarkempty": "\uE472",
+  "list": "\uE562",
+  "locked-filled": "\uE856",
+  "locked": "\uE506",
+  "map-filled": "\uE85C",
+  "map-pin": "\uE85E",
+  "map-pin-ellipse": "\uE864",
+  "map": "\uE364",
+  "minus-filled": "\uE440",
+  "mic-filled": "\uE332",
+  "minus": "\uE410",
+  "micoff": "\uE360",
+  "mic": "\uE302",
+  "clear": "\uE434",
+  "smallcircle": "\uE868",
+  "close": "\uE404",
+  "closeempty": "\uE460",
+  "paperclip": "\uE567",
+  "paperplane": "\uE503",
+  "paperplane-filled": "\uE86E",
+  "person-filled": "\uE131",
+  "contact-filled": "\uE130",
+  "person": "\uE101",
+  "contact": "\uE100",
+  "images-filled": "\uE87A",
+  "phone": "\uE200",
+  "images": "\uE87B",
+  "image": "\uE363",
+  "image-filled": "\uE877",
+  "location-filled": "\uE333",
+  "location": "\uE303",
+  "plus-filled": "\uE439",
+  "plus": "\uE409",
+  "plusempty": "\uE468",
+  "help-filled": "\uE535",
+  "help": "\uE505",
+  "navigate-filled": "\uE884",
+  "navigate": "\uE501",
+  "mic-slash-filled": "\uE892",
+  "search": "\uE466",
+  "settings": "\uE560",
+  "sound": "\uE590",
+  "sound-filled": "\uE8A1",
+  "spinner-cycle": "\uE465",
+  "download-filled": "\uE8A4",
+  "personadd-filled": "\uE132",
+  "videocam-filled": "\uE8AF",
+  "personadd": "\uE102",
+  "upload": "\uE402",
+  "upload-filled": "\uE8B1",
+  "starhalf": "\uE463",
+  "star-filled": "\uE438",
+  "star": "\uE408",
+  "trash": "\uE401",
+  "phone-filled": "\uE230",
+  "compose": "\uE400",
+  "videocam": "\uE300",
+  "trash-filled": "\uE8DC",
+  "download": "\uE403",
+  "chatbubble-filled": "\uE232",
+  "chatbubble": "\uE202",
+  "cloud-download": "\uE8E4",
+  "cloud-upload-filled": "\uE8E5",
+  "cloud-upload": "\uE8E6",
+  "cloud-download-filled": "\uE8E9",
+  "headphones": "\uE8BF",
+  "shop": "\uE609" };exports.default = _default;
 
 /***/ }),
 

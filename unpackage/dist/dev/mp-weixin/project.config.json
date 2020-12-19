@@ -10,38 +10,22 @@
   "libVersion": "",
   "appid": "touristappid",
   "projectname": "购物车测试",
-  "simulatorType": "wechat",
-  "simulatorPluginLibVersion": {},
   "condition": {
-    "plugin": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
       "list": []
     },
     "game": {
-      "list": []
-    },
-    "gamePlugin": {
+      "current": -1,
       "list": []
     },
     "miniprogram": {
-      "list": [
-        {
-          "name": "pages/pay/pay",
-          "pathName": "pages/pay/pay",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "pages/carts/carts",
-          "pathName": "pages/carts/carts",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "pages/pay/pay",
-          "pathName": "pages/pay/pay",
-          "scene": null
-        }
-      ]
+      "current": -1,
+      "list": []
     }
   }
 }

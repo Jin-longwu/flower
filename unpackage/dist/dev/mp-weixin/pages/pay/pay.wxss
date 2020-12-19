@@ -29,6 +29,9 @@
   height: auto !important;
   position: relative;
 }
+.content.data-v-c10d0c50:last-child {
+  margin-bottom: 70px;
+}
 .content .logo.data-v-c10d0c50 {
   height: 200rpx;
   width: 200rpx;
@@ -256,6 +259,50 @@
   left: 50%;
   margin-left: -160px;
   margin-bottom: 25px;
+}
+.content .address .msg.data-v-c10d0c50 {
+  width: 270px;
+  height: 95px;
+  position: absolute;
+  left: 55px;
+  top: 10px;
+  font-size: 13px;
+}
+.content .address .msg image.data-v-c10d0c50 {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 15px;
+  top: 37px;
+}
+.content .address .msg .replace.data-v-c10d0c50 {
+  position: absolute;
+  bottom: 15px;
+  left: 14px;
+  color: orangered;
+}
+.content .address .msg .mymsg.data-v-c10d0c50 {
+  width: 230px;
+  position: absolute;
+  top: 10px;
+  left: 14px;
+}
+.content .address .msg .mymsg .name.data-v-c10d0c50 {
+  color: grey;
+}
+.content .address .msg .mymsg .tel.data-v-c10d0c50 {
+  margin-left: 15px;
+  color: grey;
+}
+.content .address .msg .place.data-v-c10d0c50 {
+  width: 210px;
+  height: 45px;
+  position: absolute;
+  bottom: 26px;
+  color: grey;
+  left: 14px;
+  letter-spacing: 2px;
+  line-height: 45px;
 }
 .content .address .icon.data-v-c10d0c50 {
   width: 35px !important;
