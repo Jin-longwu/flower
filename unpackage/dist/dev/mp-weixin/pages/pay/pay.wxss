@@ -287,9 +287,6 @@
   top: 10px;
   left: 14px;
 }
-.content .address .msg .mymsg .name.data-v-c10d0c50 {
-  color: grey;
-}
 .content .address .msg .mymsg .tel.data-v-c10d0c50 {
   margin-left: 15px;
   color: grey;
@@ -299,7 +296,6 @@
   height: 45px;
   position: absolute;
   bottom: 26px;
-  color: grey;
   left: 14px;
   letter-spacing: 2px;
   line-height: 45px;

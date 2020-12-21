@@ -446,10 +446,6 @@
 					top: 10px;
 					left: 14px;
 
-					.name {
-						color: grey;
-					}
-
 					.tel {
 						margin-left: 15px;
 						color: grey;
@@ -462,7 +458,6 @@
 					height: 45px;
 					position: absolute;
 					bottom: 26px;
-					color: grey;
 					left: 14px;
 					letter-spacing: 2px;
 					line-height: 45px;
